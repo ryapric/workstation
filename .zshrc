@@ -152,8 +152,8 @@ install-go() {
 get-apt-key() {
   [[ -z "${1}" ]] && { printf 'Must specify GPG key URL as first argument\n' && return 1; }
   [[ -z "${2}" ]] && { printf 'Must specify GPG key file name as second argument\n' && return 1; }
-  url="${1}"
-  keyfile="${2}"
+  local url="${1}"
+  local keyfile="${2}"
   curl -fsSL "${url}" > /tmp/"${keyfile}"
   if file /tmp/"${keyfile}" | grep '(old)'; then
     printf 'ASCII GPG format found; dearmoring first\n'
