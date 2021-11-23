@@ -133,6 +133,7 @@ export AWS_PROFILE=default
 
 export OSC_ROOT="${HOME}/repos/opensourcecorp"
 export PACKER_CACHE_DIR="${HOME}/.packer.d/packer_cache"
+export VAGRANT_EXPERIMENTAL="disks"
 
 # Functions
 install-go() {
