@@ -148,6 +148,22 @@ install-go() {
   printf 'Successfully installed Go %s!\n' "${1}"
 }
 
+get-apt-key() {
+  [[ -z "${1}" ]] && { printf 'Must specify GPG key URL as first argument\n' && return 1; }
+  [[ -z "${2}" ]] && { printf 'Must specify GPG key file name as second argument\n' && return 1; }
+  url="${1}"
+  keyfile="${2}"
+  curl -fsSL "${url}" > /tmp/"${keyfile}"
+  if file /tmp/"${keyfile}" | grep '(old)'; then
+    printf 'ASCII GPG format found; dearmoring first\n'
+    sudo sh -c "cat /tmp/${keyfile} | gpg --dearmor > /etc/apt/trusted.gpg.d/${keyfile}"
+  else
+    printf 'GPG binary format found, adding key directly\n'
+    sudo cp /tmp/"${keyfile}" /etc/apt/trusted.gpg.d/"${keyfile}"
+  fi
+  printf 'Stored GPG key material in /etc/apt/trusted.gpg.d/%s\n' "${keyfile}"
+}
+
 # THE FOLLOWING NEED TO RUN LAST
 # Check if running under WSL
 if uname -a | grep -q -i -E 'microsoft|wsl'; then
