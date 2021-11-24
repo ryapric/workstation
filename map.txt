@@ -1,0 +1,4 @@
+# Col 1 is repo file, col 2 is target path
+# Don't quote vars, it'll break the while-loop read
+.zshrc ${HOME}/.zshrc
+htoprc ${HOME}/.config/htop/htoprc
