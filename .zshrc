@@ -45,15 +45,31 @@ export VAGRANT_EXPERIMENTAL="disks"
 ### Functions
 install-go() {
   if [[ -z "${1}" ]]; then
-    printf 'ERROR: Must provide a Go version\n'
-    return 1
+    printf 'No specific version provided, so finding latest Go version...\n'
+    # Need to redirect to file first, so curl doesn't get mad about closing the pipe before the HTML is done being read
+    curl -fsSL https://go.dev/dl > /tmp/go-dl.html
+    local goversion=$(
+      </tmp/go-dl.html \
+        grep -o -E 'go[[:digit:]]+\.[[:digit:]]+\.?[[:digit:]]+?' \
+        | sed -E 's/go//' \
+        | head -n1
+    )
+  else
+    local goversion="${1}"
   fi
-  printf 'Downloading Go version %s...\n' "${1}"
-  curl -fsSL -o /tmp/go.tar.gz https://golang.org/dl/go"${1}".linux-amd64.tar.gz
+
+  printf 'Downloading Go version %s...\n' "${goversion}"
+  if [[ ! -f /tmp/"go${goversion}".tar.gz ]]; then
+    curl -fsSL -o /tmp/"go${goversion}".tar.gz https://golang.org/dl/go"${goversion}".linux-amd64.tar.gz
+  fi
+  printf 'Downloaded Go version %s\n' "${goversion}"
+
+  printf 'CLeaning up any old Go installation, and adding new one...\n'
   sudo rm -rf /usr/local/go
-  sudo tar -C /usr/local -xzf /tmp/go.tar.gz
-  go version || return 1
-  printf 'Successfully installed Go %s!\n' "${1}"
+  sudo tar -C /usr/local -xzf /tmp/"go${goversion}.tar.gz"
+
+  printf 'Version check for %s: %s\n' "$(command -v go)" "$(go version)" || return 1
+  printf 'Successfully installed Go %s!\n' "${goversion}"
 }
 
 get-apt-key() {
