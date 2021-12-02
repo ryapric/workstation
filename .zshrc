@@ -58,11 +58,11 @@ install-go() {
     local goversion="${1}"
   fi
 
-  printf 'Downloading Go version %s...\n' "${goversion}"
   if [[ ! -f /tmp/"go${goversion}".tar.gz ]]; then
+    printf 'Downloading Go version %s...\n' "${goversion}"
     curl -fsSL -o /tmp/"go${goversion}".tar.gz https://golang.org/dl/go"${goversion}".linux-amd64.tar.gz
+    printf 'Downloaded Go version %s\n' "${goversion}"
   fi
-  printf 'Downloaded Go version %s\n' "${goversion}"
 
   printf 'Cleaning up any old Go installation, and adding new one...\n'
   sudo rm -rf /usr/local/go
