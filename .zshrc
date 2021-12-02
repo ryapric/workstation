@@ -64,7 +64,7 @@ install-go() {
   fi
   printf 'Downloaded Go version %s\n' "${goversion}"
 
-  printf 'CLeaning up any old Go installation, and adding new one...\n'
+  printf 'Cleaning up any old Go installation, and adding new one...\n'
   sudo rm -rf /usr/local/go
   sudo tar -C /usr/local -xzf /tmp/"go${goversion}.tar.gz"
 
