@@ -26,6 +26,7 @@ if grep -q 'sid' /etc/*-release; then
   printf 'If Podman (or Docker) is not working in WSL due to iptables complaining, check out this link:\n'
   printf 'https://github.com/microsoft/WSL/discussions/4872#discussioncomment-99164\n'
   alias docker='sudo podman '
+  alias docker-compose='sudo podman-compose '
 fi
 
 alias aws-azure-login="docker run --rm -it -v ${HOME}/.aws:/root/.aws docker.io/sportradar/aws-azure-login:latest "
