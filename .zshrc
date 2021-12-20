@@ -14,7 +14,7 @@ source "${ZSH}/oh-my-zsh.sh"
 ### PATH
 for p in \
   "${HOME}/.local/bin" \
-  "/usr/local/go/bin" \
+  "${HOME}/.local/go/bin" \
   "${HOME}/go/bin" \
 ; do
   export PATH="${p}:${PATH}"
@@ -73,8 +73,8 @@ install-go() {
   fi
 
   printf 'Cleaning up any old Go installation, and adding new one...\n'
-  sudo rm -rf /usr/local/go
-  sudo tar -C /usr/local -xzf /tmp/"go${goversion}.tar.gz"
+  sudo rm -rf "${HOME}"/.local/go
+  sudo tar -C "${HOME}"/.local -xzf /tmp/"go${goversion}.tar.gz"
 
   printf 'Version check for %s: %s\n' "$(command -v go)" "$(go version)" || return 1
   printf 'Successfully installed Go %s!\n' "${goversion}"
