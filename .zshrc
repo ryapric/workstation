@@ -74,7 +74,7 @@ install-go() {
 
   printf 'Cleaning up any old Go installation, and adding new one...\n'
   rm -rf "${HOME}"/.local/go
-  tar -C "${HOME}"/.local -xzf /tmp/"go${goversion}.tar.gz"
+  tar -C "${HOME}"/.local --overwrite -xzf /tmp/"go${goversion}.tar.gz"
 
   printf 'Version check for %s: %s\n' "$(command -v go)" "$(go version)" || return 1
   printf 'Successfully installed Go %s!\n' "${goversion}"
