@@ -46,7 +46,7 @@ export AWS_PROFILE=default
 
 export DOCKER_BUILDKIT=1
 
-export OSC_ROOT="${HOME}/repos/opensourcecorp"
+export OSC_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 export PACKER_CACHE_DIR="${HOME}/.packer.d/packer_cache"
 export VAGRANT_EXPERIMENTAL="disks"
 
