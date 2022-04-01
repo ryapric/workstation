@@ -21,13 +21,13 @@ for p in \
 done
 
 ### Aliases
-if grep -q 'sid' /etc/*-release; then
-  printf 'Debian Sid detected; assuming you are using Podman, and will alias "docker" to that\n'
+# if grep -q 'sid' /etc/*-release; then
+#   printf 'Debian Sid detected; assuming you are using Podman, and will alias "docker" to that\n'
   printf 'If Podman (or Docker) is not working in WSL due to iptables complaining, check out this link:\n'
   printf 'https://github.com/microsoft/WSL/discussions/4872#discussioncomment-99164\n'
-  alias docker='sudo podman '
-  alias docker-compose='sudo podman-compose '
-fi
+#   alias docker='sudo podman '
+#   alias docker-compose='sudo podman-compose '
+# fi
 
 alias aws-azure-login="docker run --rm -it -v ${HOME}/.aws:/root/.aws docker.io/sportradar/aws-azure-login:latest "
 alias cfn='aws cloudformation '
@@ -98,7 +98,7 @@ get-apt-key() {
 
 ### THE FOLLOWING NEED TO RUN LAST
 # Check if running under WSL, and NOT WSL Debian
-if uname -a | grep -q -i -E 'microsoft|wsl' && ! grep -q 'sid' /etc/*-release ; then
+if uname -a | grep -q -i -E 'microsoft|wsl' ; then # && ! grep -q 'sid' /etc/*-release ; then
   printf 'Trying to run sudo at shell start; you might be prompted for the sudo password if needed\n'
   sudo service docker start || true
 fi
