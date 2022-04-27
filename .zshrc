@@ -36,6 +36,7 @@ alias dspv='docker system prune --volumes'
 alias rhad='docker run --rm -it -v "${PWD}":/root/src sauce.opensourcecorp.org/opensourcecorp/rhadamanthus:latest '
 alias tclsh='rlwrap tclsh '
 alias tf='terraform '
+alias tflint='docker run --rm -v "${PWD}":/data ghcr.io/terraform-linters/tflint:latest '
 alias va='source venv/bin/activate'
 alias vc='python3 -m venv --clear venv'
 
