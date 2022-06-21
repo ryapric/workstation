@@ -93,6 +93,16 @@ get-apt-key() {
   printf 'Stored GPG key material in /etc/apt/trusted.gpg.d/%s\n' "${keyfile}"
 }
 
+# Handy SQLite func for operating directly on CSVs
+csvql() {
+  sqlite3 \
+    ':memory:' \
+    -cmd '.mode csv' \
+    -cmd ".import $1 data" \
+    -cmd '.mode column' \
+    "${2}"
+}
+
 ### THE FOLLOWING NEED TO RUN LAST
 # Check if running under WSL, and NOT WSL Debian
 if uname -a | grep -q -i -E 'microsoft|wsl' ; then # && ! grep -q 'sid' /etc/*-release ; then
