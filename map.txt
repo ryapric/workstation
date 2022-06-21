@@ -1,4 +1,15 @@
-# Col 1 is repo file, col 2 is target path
+# col1 is repo file, col2 is target path, col3 is how to add it
 # Don't quote vars, it'll break the while-loop read
+
 .zshrc ${HOME}/.zshrc
-htoprc ${HOME}/.config/htop/htoprc
+
+# htop's config is highly variable between version, so we can just copy it vs. linking so it doesn't clutter up the VCS history
+htoprc ${HOME}/.config/htop/htoprc copy
+
+# XFCE4 channel config files (I can't yet get these to work for some reason)
+# xfce4/xfce4-keyboard-shortcuts.xml ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
+# xfce4/xfce4-panel.xml              ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+# xfce4/xfce4-settings-editor.xml    ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-editor.xml
+# xfce4/xfce4-settings-manager.xml   ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-manager.xml
+# xfce4/xfwm4.xml                    ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+# xfce4/xsettings.xml                ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
