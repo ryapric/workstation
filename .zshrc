@@ -44,7 +44,7 @@ export AWS_PROFILE=default
 
 export DOCKER_BUILDKIT=1
 
-export OSC_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
+export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 export VAGRANT_EXPERIMENTAL="disks"
 
 ### Functions
@@ -111,7 +111,7 @@ if uname -a | grep -q -i -E 'microsoft|wsl' ; then # && ! grep -q 'sid' /etc/*-r
   printf 'Trying to run sudo at shell start; you might be prompted for the sudo password if needed\n'
   sudo service docker start || true
   sudo bash -c '[[ -f /etc/resolv.conf ]] || sudo printf "nameserver 8.8.8.8\nnameserver 1.1.1.1\n" > /etc/resolv.conf'
-  export VAGRANT_DEFAULT_PROVIDER='hyperv'
+  # export VAGRANT_DEFAULT_PROVIDER='hyperv'
 fi
 
 # This needs to run DEAD LAST, since it's an exec call
