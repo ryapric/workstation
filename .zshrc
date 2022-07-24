@@ -31,6 +31,7 @@ alias aws-azure-login="docker run --rm -it -v ${HOME}/.aws:/root/.aws docker.io/
 alias cfn='aws cloudformation '
 alias dsp='docker system prune'
 alias dspv='docker system prune --volumes'
+alias k='kubectl '
 alias rhad-lint='docker run --rm -it -v "${PWD}":/home/rhad/src ociregistry.opensourcecorp.org/library/rhad:latest lint'
 alias tclsh='rlwrap tclsh '
 alias tf='terraform '
@@ -46,6 +47,11 @@ export DOCKER_BUILDKIT=1
 
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 export VAGRANT_EXPERIMENTAL="disks"
+
+### Completions
+if command -v kubectl > /dev/null; then
+  source <(kubectl completion zsh)
+fi
 
 ### Functions
 install-go() {
