@@ -2,8 +2,8 @@ Vagrant.configure("2") do |config|
   box = "debian/bullseye64"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.cpus = 1
-    vb.memory = 1024
+    vb.cpus = 4
+    vb.memory = 2048
   end
 
   if Vagrant.has_plugin?("vagrant-vbguest")
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
         useradd -G sudo -m ryan
         printf 'ryan ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/ryan
 
-        sudo -u ryan bash /vagrant/system/_main.sh
+        # sudo -u ryan bash /vagrant/system/main.sh
       SCRIPT
   end
 
