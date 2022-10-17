@@ -12,11 +12,16 @@ verify() {
     docker
     go
     nano
+    packer
     pip3
     protoc
     python3
     R
     Rscript
+    rstudio
+    terraform
+    vagrant
+    vault
     zsh
   )
 

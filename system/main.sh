@@ -11,6 +11,15 @@ export APT_LISTCHANGES_FRONTEND=none
 
 here=$(dirname "$(realpath "${0}")")
 
+# Set PATH for when the directories are available to search
+for p in \
+  "${HOME}/.local/bin" \
+  "${HOME}/.local/go/bin" \
+  "${HOME}/go/bin" \
+; do
+  export PATH="${p}:${PATH}"
+done
+
 scripts=$(find "${here}" -not -path "${here}/main.sh" -name '*.sh')
 for script in ${scripts}; do
   #shellcheck disable=SC1090
@@ -33,31 +42,41 @@ fi
 
 main() {
   # Core system utilities
-  run init-sys
+  run init-core
 
   # Editor(s)
-  # run init-vscode
+  run init-vscode
   # run init-nanorc
 
   # Shell
-  # run init-ohmyzsh
+  run init-ohmyzsh
 
   # Languages/toolchains
-  # run init-go
+  run init-go
   run init-python
-  # run init-R
-  # run init-protobuf
+  run init-R
+  run init-protobuf-grpc
 
   # Containerization
-  # run init-docker
+  run init-docker
 
-  # run init-hashicorp
+  # HashiCorp tooling, which I might split out later
+  run init-hashicorp
 
-  # Check for errors at the end, which will fail out if there are any
+  log-info 'Setting up dotfile symlinks...'
+  make -C "${here}"/.. dotfiles-link
+
+  # Check for errors again at the end, which will fail out if there are any
   run check-errors
+
+  # Cleanup
+  sudo apt-get autoremove -y
 
   # Run verification checks that installations/configurations went as expected
   run verify
+
+  log-info 'All done! Workstation is ready to use!'
+  log-info 'You will probably want to restart your machine, though'
 }
 
 if [[ "${BASH_SOURCE[0]:-}" == "${0}" ]];  then

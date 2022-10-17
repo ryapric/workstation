@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-init-sys() {
+init-core() {
   log-info 'Bumping OS to Debian Sid/Unstable...'
   # TODO: There's a lot of root calls here, so it's all a single string call.
   # There are myriad ways I could do this instead, but this works right now, so.
@@ -12,8 +12,8 @@ init-sys() {
   apt-get update
   apt-get install -y apt-transport-https
   rm /etc/apt/sources.list
-  printf "deb https://deb.debian.org/debian unstable main contrib non-free" >> /etc/apt/sources.list
-  printf "deb-src https://deb.debian.org/debian unstable main contrib non-free" >> /etc/apt/sources.list
+  printf "deb https://deb.debian.org/debian unstable main contrib non-free\n" >> /etc/apt/sources.list
+  printf "deb-src https://deb.debian.org/debian unstable main contrib non-free\n" >> /etc/apt/sources.list
   apt-get update
   # This dpkg option forces replacement of config files with the maintainer
   # versions; otherwise, a prompt appears
@@ -24,12 +24,21 @@ init-sys() {
   sudo apt-get update
   sudo apt-get install -y \
     apt-transport-https \
+    ca-certificates \
     curl \
+    git \
     gnupg2 \
     htop \
     jq \
+    lsb-release \
     make \
     shellcheck \
+    software-properties-common \
+    tmux \
     zsh \
   || log-error 'Failed to install some system packages!'
+
+  log-info 'Adding directories that might need to be found later...'
+  mkdir -p \
+    "${HOME}/.local/bin"
 }

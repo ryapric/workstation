@@ -57,7 +57,8 @@ install-go() {
   if [[ -z "${1}" ]]; then
     printf 'No specific version provided, so finding latest Go version...\n'
     # Need to redirect to file first, so curl doesn't get mad about closing the pipe before the HTML is done being read
-    { curl -fsSL https://go.dev/dl > /tmp/go-dl.html } || return 1
+    { curl -fsSL https://go.dev/dl > /tmp/go-dl.html ; } || return 1
+    # shellcheck disable=SC2155
     local goversion=$(
       </tmp/go-dl.html \
         grep -o -E 'go[0-9]+\.[0-9]+(\.[0-9]+)?' \
@@ -70,7 +71,7 @@ install-go() {
 
   if [[ ! -f /tmp/"go${goversion}".tar.gz ]]; then
     printf 'Downloading Go version %s...\n' "${goversion}"
-    { curl -fsSL -o /tmp/"go${goversion}".tar.gz https://golang.org/dl/go"${goversion}".linux-amd64.tar.gz } || return 1
+    { curl -fsSL -o /tmp/"go${goversion}".tar.gz https://golang.org/dl/go"${goversion}".linux-amd64.tar.gz ; } || return 1
     printf 'Downloaded Go version %s\n' "${goversion}"
   fi
 

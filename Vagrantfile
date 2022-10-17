@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
         useradd -G sudo -m ryan
         printf 'ryan ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/ryan
 
-        # sudo -u ryan bash /vagrant/system/main.sh
+        sudo -u ryan bash /vagrant/system/main.sh
       SCRIPT
   end
 
