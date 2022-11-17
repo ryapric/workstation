@@ -112,10 +112,6 @@ csvql() {
 ### THE FOLLOWING NEED TO RUN LAST
 # Check if running under WSL, and NOT WSL Debian
 if uname -a | grep -q -i -E 'microsoft|wsl' ; then # && ! grep -q 'sid' /etc/*-release ; then
-  printf 'If Podman (or Docker) is not working in WSL due to iptables complaining, check out this link:\n'
-  printf 'https://github.com/microsoft/WSL/discussions/4872#discussioncomment-99164\n'
-  printf 'Trying to run sudo at shell start; you might be prompted for the sudo password if needed\n'
-  sudo service docker start || true
   sudo bash -c '[[ -f /etc/resolv.conf ]] || sudo printf "nameserver 8.8.8.8\nnameserver 1.1.1.1\n" > /etc/resolv.conf'
   # export VAGRANT_DEFAULT_PROVIDER='hyperv'
 fi
