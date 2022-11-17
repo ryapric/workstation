@@ -11,6 +11,8 @@ verify() {
     code
     docker
     go
+    ipython3
+    irb
     nano
     packer
     pip3
@@ -19,6 +21,7 @@ verify() {
     R
     Rscript
     rstudio
+    ruby
     terraform
     vagrant
     vault
