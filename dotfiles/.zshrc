@@ -112,6 +112,10 @@ csvql() {
 ### THE FOLLOWING NEED TO RUN LAST
 # Check if running under WSL, and NOT WSL Debian
 if uname -a | grep -q -i -E 'microsoft|wsl' ; then # && ! grep -q 'sid' /etc/*-release ; then
+  if [[ -f /usr/lib/binfmt.d/WSLInterop.conf ]]; then
+    printf 'WARNING: the file at /usr/lib/binfmt.d/WSLInterop.conf is there until MS fixes systemd-enabled WSL2 interop -- delete later when no longer needed\n'
+    printf 'Additional details here: https://github.com/microsoft/WSL/issues/8843#issuecomment-1255546484\n'
+  fi
   sudo bash -c '[[ -f /etc/resolv.conf ]] || sudo printf "nameserver 8.8.8.8\nnameserver 1.1.1.1\n" > /etc/resolv.conf'
   # export VAGRANT_DEFAULT_PROVIDER='hyperv'
 fi
