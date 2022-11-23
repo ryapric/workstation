@@ -32,4 +32,12 @@ init-go() {
 
   printf 'Version check for %s: %s\n' "$(command -v go)" "$(go version)" || return 1
   printf 'Successfully installed Go %s!\n' "${goversion}"
+
+  log-info 'Installing Go tooling...'
+
+  pkgs=(
+    golang.org/x/pkgsite/cmd/pkgsite@latest
+  )
+
+  for pkg in "${pkgs[@]}" ; do go install "${pkg}" ; done
 }
