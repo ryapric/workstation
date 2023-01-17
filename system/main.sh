@@ -44,6 +44,9 @@ main() {
   # Core system utilities
   run init-core
 
+  # Browser(s)
+  run init-browsers
+
   # Editor(s)
   run init-vscode
   # run init-nanorc
@@ -62,6 +65,14 @@ main() {
 
   # HashiCorp tooling, which I might split out later
   run init-hashicorp
+
+  # Game emulator(s)
+  run init-game-emulators
+
+  # Bluetooth behavior
+  run init-bluetooth
+
+  # ============================================================================
 
   log-info 'Setting up dotfile symlinks...'
   make -C "${here}"/.. dotfiles-link

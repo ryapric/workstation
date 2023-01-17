@@ -25,6 +25,8 @@ init-core() {
   sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
+    blueman \
+    bluez \
     curl \
     git \
     gnupg2 \
@@ -32,6 +34,11 @@ init-core() {
     jq \
     lsb-release \
     make \
+    net-tools \
+    nmap \
+    p7zip \
+    ripgrep \
+    rsync \
     shellcheck \
     software-properties-common \
     tmux \
