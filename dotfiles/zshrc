@@ -45,7 +45,7 @@ export AWS_PROFILE=default
 export DOCKER_BUILDKIT=1
 
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
-export VAGRANT_EXPERIMENTAL="disks"
+# export VAGRANT_EXPERIMENTAL="disks"
 
 ### Completions
 if command -v kubectl > /dev/null; then

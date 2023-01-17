@@ -1,7 +1,7 @@
 # col1 is repo file, col2 is target path, col3 is how to add it
 # Don't quote vars, it'll break the while-loop read
 
-.zshrc ${HOME}/.zshrc
+zshrc ${HOME}/.zshrc
 
 # htop's config is highly variable between version, so we can just copy it vs. linking so it doesn't clutter up the VCS history
 htoprc ${HOME}/.config/htop/htoprc copy
