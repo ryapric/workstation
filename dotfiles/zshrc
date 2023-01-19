@@ -16,8 +16,12 @@ for p in \
   "${HOME}/.local/bin" \
   "${HOME}/.local/go/bin" \
   "${HOME}/go/bin" \
+  "/usr/local/games" \
+  "/usr/games" \
 ; do
-  export PATH="${p}:${PATH}"
+  if [[ ! "${PATH}" =~ "${p}" ]]; then
+    export PATH="${p}:${PATH}"
+  fi
 done
 
 ### Aliases
