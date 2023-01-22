@@ -42,10 +42,12 @@ init-core() {
     shellcheck \
     software-properties-common \
     tmux \
+    tree \
     zsh \
   || log-error 'Failed to install some system packages!'
 
   log-info 'Adding directories that might need to be found later...'
   mkdir -p \
-    "${HOME}/.local/bin"
+    "${HOME}/.local/bin" \
+    "${HOME}"/repos
 }

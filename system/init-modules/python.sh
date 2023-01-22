@@ -9,7 +9,8 @@ init-python() {
     python3-venv \
   || log-error 'Error when installing Python utilities!'
 
-  pip3 install --user --no-warn-script-location \
+  python3 -m pip install --user --no-warn-script-location \
+    ipython \
     mypy \
     pytest \
     pytest-cover \

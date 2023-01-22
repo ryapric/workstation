@@ -10,9 +10,12 @@ verify() {
     buf
     code
     docker
+    firefox
     go
     ipython3
     irb
+    mupen64plus
+    mupen64plus-qt
     nano
     packer
     pip3
@@ -23,8 +26,11 @@ verify() {
     rstudio
     ruby
     terraform
+    torbrowser-launcher
     vagrant
     vault
+    xfce4-about
+    xfce4-terminal
     zsh
   )
 

@@ -11,11 +11,17 @@ export APT_LISTCHANGES_FRONTEND=none
 
 here=$(dirname "$(realpath "${0}")")
 
-# Set PATH for when the directories are available to search
+# Make sure your user has passwordless sudo
+sudo sh -c "printf 'ryan ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/ryan"
+
+# Set PATH for when the directories are available to search (this is currently
+# duplicated in ../dotfiles/zshrc as well)
 for p in \
   "${HOME}/.local/bin" \
   "${HOME}/.local/go/bin" \
   "${HOME}/go/bin" \
+  "/usr/games" \
+  "/usr/local/games" \
 ; do
   export PATH="${p}:${PATH}"
 done
@@ -43,6 +49,9 @@ fi
 main() {
   # Core system utilities
   run init-core
+
+  # Desktop environment
+  run init-xfce4
 
   # Browser(s)
   run init-browsers
@@ -74,8 +83,9 @@ main() {
 
   # ============================================================================
 
-  log-info 'Setting up dotfile symlinks...'
-  make -C "${here}"/.. dotfiles-link
+  # make -C "${here}"/.. dotfiles-link # for local Vagrant testing from the mounted folder
+  # Run dotfiles last, so they don't get replaced by installations etc.
+  run init-dotfiles
 
   # Check for errors again at the end, which will fail out if there are any
   run check-errors
