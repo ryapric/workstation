@@ -29,6 +29,7 @@ verify() {
     torbrowser-launcher
     vagrant
     vault
+    vboxmanage
     xfce4-about
     xfce4-terminal
     zsh

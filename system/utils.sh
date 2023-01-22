@@ -14,21 +14,25 @@ run() {
   "${@}"
 }
 
-# Logging utilities
+# Logging utilities -- they each wrap three lines for visibility, I know it
+# looks noisy
 log-info() {
-  printf '>>> INFO:  %s\n' "$@" 2>&1
+  printf '>>>\n>>> INFO:  %s\n>>>\n' "$@" 2>&1
 }
 
 log-warn() {
-  printf '>>> WARN:  %s\n' "$@" 2>&1
+  printf '>>>\n>>> WARN:  %s\n>>>\n' "$@" 2>&1
 }
 
 log-error() {
-  printf '>>> ERROR: %s\n' "$@" 2>&1 | tee -a "${errfile}"
+  printf '>>>\n>>> ERROR: %s\n>>>\n' "$@" 2>&1 | tee -a "${errfile}"
 }
 
 # Checks the error log file for entries, and will summarize recorded errors
-# before exiting. This is run at the very end of the main function, but can also be called early to force failure on an unrecoverable error. Ideally though, you probably want to resist calling this within other funcs so that the full process can run
+# before exiting. This is run at the very end of the main function, but can also
+# be called early to force failure on an unrecoverable error. Ideally though,
+# you probably want to resist calling this within other funcs so that the full
+# process can run
 check-errors() {
   touch "${errfile}"
   if [[ $(awk 'END { print NR }' "${errfile}") -gt 0 ]]; then

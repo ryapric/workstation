@@ -72,6 +72,9 @@ main() {
   # Containerization
   run init-docker
 
+  # Virtualization
+  run init-virtualbox
+
   # HashiCorp tooling, which I might split out later
   run init-hashicorp
 
@@ -97,7 +100,7 @@ main() {
   run verify
 
   log-info 'All done! Workstation is ready to use!'
-  log-info 'You will probably want to restart your machine, though'
+  log-info 'You will want to restart your machine, though, to ensure that anything that might have needed e.g. an updated kernel is working'
 }
 
 if [[ "${BASH_SOURCE[0]:-}" == "${0}" ]];  then
