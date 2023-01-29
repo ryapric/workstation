@@ -5,3 +5,9 @@ system-config:
 
 dotfiles-link:
 	@make -C ./dotfiles -s setup
+
+test-run:
+	vagrant up && vagrant reload
+
+test-stop:
+	vagrant destroy -f
