@@ -78,8 +78,8 @@ main() {
   # HashiCorp tooling, which I might split out later
   run init-hashicorp
 
-  # Game emulator(s)
-  run init-game-emulators
+  # Gaming software
+  run init-gaming
 
   # Bluetooth behavior
   run init-bluetooth

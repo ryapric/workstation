@@ -25,6 +25,7 @@ verify() {
     Rscript
     rstudio
     ruby
+    steam
     terraform
     torbrowser-launcher
     vagrant
