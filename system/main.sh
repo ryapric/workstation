@@ -86,7 +86,6 @@ main() {
 
   # ============================================================================
 
-  # make -C "${here}"/.. dotfiles-link # for local Vagrant testing from the mounted folder
   # Run dotfiles last, so they don't get replaced by installations etc.
   run init-dotfiles
 
