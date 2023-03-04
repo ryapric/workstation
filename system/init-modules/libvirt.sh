@@ -6,6 +6,7 @@ init-libvirt() {
 
   sudo apt-get install -y \
     libvirt-daemon-system \
-    vagrant-libvirt
+    vagrant-libvirt \
+    virt-manager
   sudo usermod -aG libvirt "${USER}"
 }

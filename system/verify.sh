@@ -32,6 +32,7 @@ verify() {
     vault
     vboxmanage
     virsh
+    virt-manager
     xfce4-about
     xfce4-terminal
     zsh
