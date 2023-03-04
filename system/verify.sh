@@ -31,6 +31,7 @@ verify() {
     vagrant
     vault
     vboxmanage
+    virsh
     xfce4-about
     xfce4-terminal
     zsh

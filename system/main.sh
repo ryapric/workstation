@@ -74,6 +74,7 @@ main() {
 
   # Virtualization
   run init-virtualbox
+  run init-libvirt
 
   # HashiCorp tooling, which I might split out later
   run init-hashicorp
