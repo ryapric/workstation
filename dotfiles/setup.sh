@@ -34,7 +34,7 @@ while read -r line; do
 
   if [[ "${tgt}" =~ ${HOME} ]]; then
     printf 'Fixing user permissions for target "%s"\n' "${tgt}"
-    sudo chmod -R "${USER}:${USER}" "${tgt}"
+    sudo chown -R "${USER}:${USER}" "${tgt}"
   fi
 
 done < /tmp/map.txt
