@@ -30,7 +30,7 @@ verify() {
     torbrowser-launcher
     vagrant
     vault
-    vboxmanage
+    # vboxmanage
     virsh
     virt-manager
     xfce4-about

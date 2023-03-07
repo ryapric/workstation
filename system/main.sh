@@ -73,8 +73,7 @@ main() {
   run init-docker
 
   # Virtualization
-  run init-virtualbox
-  run init-libvirt
+  run init-virtualization
 
   # HashiCorp tooling, which I might split out later
   run init-hashicorp
@@ -85,16 +84,18 @@ main() {
   # Bluetooth behavior
   run init-bluetooth
 
-  # ============================================================================
-
   # Run dotfiles last, so they don't get replaced by installations etc.
   run init-dotfiles
 
-  # Check for errors again at the end, which will fail out if there are any
-  run check-errors
+  # ============================================================================
 
   # Cleanup
   sudo apt-get autoremove -y
+
+  # ============================================================================
+
+  # Check for errors again at the end, which will fail out if there are any
+  run check-errors
 
   # Run verification checks that installations/configurations went as expected
   run verify

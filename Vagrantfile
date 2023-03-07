@@ -1,9 +1,17 @@
 Vagrant.configure("2") do |config|
   box = "debian/bullseye64"
 
+  cpus   = 4
+  memory = 2048
+
   config.vm.provider "virtualbox" do |vb|
-    vb.cpus = 4
-    vb.memory = 2048
+    vb.cpus   = cpus
+    vb.memory = memory
+  end
+
+  config.vm.provider "libvirt" do |lv|
+    lv.cpus   = cpus
+    lv.memory = memory
   end
 
   if Vagrant.has_plugin?("vagrant-vbguest")
@@ -12,7 +20,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "ws" do |ws|
     ws.vm.box = box
-    ws.vm.synced_folder ".", "/vagrant" # , disabled: true
+    ws.vm.synced_folder ".", "/vagrant", disabled: true
+    ws.vm.provision "file", source: "./system", destination: "/tmp/system"
+    ws.vm.provision "file", source: "./dotfiles", destination: "/tmp/dotfiles"
     ws.vm.provision "shell",
       inline: <<-SCRIPT
         # Vagrant boot needs some redundant love before the main script, since
@@ -23,7 +33,7 @@ Vagrant.configure("2") do |config|
         echo -e 'vagrant\nvagrant' | passwd ryan
         printf 'ryan ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/ryan
 
-        sudo -u ryan bash /vagrant/system/main.sh
+        sudo -u ryan bash /tmp/system/main.sh
       SCRIPT
   end
 

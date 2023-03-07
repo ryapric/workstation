@@ -15,5 +15,6 @@ init-hashicorp() {
     packer \
     terraform \
     vagrant \
+    vagrant-libvirt \
     vault
 }
