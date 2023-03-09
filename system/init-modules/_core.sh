@@ -9,6 +9,7 @@ init-core() {
   sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
+    bats \
     blueman \
     bluez \
     curl \
@@ -20,6 +21,7 @@ init-core() {
     make \
     net-tools \
     nmap \
+    parallel \
     p7zip \
     ripgrep \
     rsync \

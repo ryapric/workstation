@@ -7,6 +7,7 @@ touch "${cmdoutput_file}"
 
 verify() {
   cmds=(
+    bats
     buf
     code
     docker
@@ -18,6 +19,7 @@ verify() {
     mupen64plus-qt
     nano
     packer
+    parallel
     pip3
     protoc
     python3
