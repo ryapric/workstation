@@ -22,6 +22,7 @@ init-core() {
     net-tools \
     nmap \
     parallel \
+    postgresql-client \
     p7zip \
     ripgrep \
     rsync \
