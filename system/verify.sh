@@ -9,6 +9,7 @@ verify() {
   cmds=(
     bats
     buf
+    cargo
     code
     docker
     firefox
@@ -27,6 +28,8 @@ verify() {
     Rscript
     rstudio
     ruby
+    rustc
+    rustup
     steam
     terraform
     torbrowser-launcher

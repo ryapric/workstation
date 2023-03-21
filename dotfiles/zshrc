@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 ### ZSH stuff
 export ZSH="${HOME}/.oh-my-zsh"
 ZSH_THEME="gnzh"
@@ -16,10 +18,11 @@ for p in \
   "${HOME}/.local/bin" \
   "${HOME}/.local/go/bin" \
   "${HOME}/go/bin" \
+  "${HOME}/.cargo/bin" \
   "/usr/games" \
   "/usr/local/games" \
 ; do
-  if [[ ! "${PATH}" =~ "${p}" ]]; then
+  if [[ ! "${PATH}" =~ ${p} ]]; then
     export PATH="${p}:${PATH}"
   fi
 done

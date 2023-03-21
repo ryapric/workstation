@@ -20,10 +20,13 @@ for p in \
   "${HOME}/.local/bin" \
   "${HOME}/.local/go/bin" \
   "${HOME}/go/bin" \
+  "${HOME}/.cargo/bin" \
   "/usr/games" \
   "/usr/local/games" \
 ; do
-  export PATH="${p}:${PATH}"
+  if [[ ! "${PATH}" =~ ${p} ]]; then
+    export PATH="${p}:${PATH}"
+  fi
 done
 
 scripts=$(find "${here}" -not -path "${here}/main.sh" -name '*.sh')
@@ -65,6 +68,7 @@ main() {
 
   # Languages/toolchains
   run init-go
+  run init-rust
   run init-python
   run init-R
   run init-protobuf-grpc
