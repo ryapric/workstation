@@ -14,8 +14,8 @@ init-protobuf-grpc() {
     go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
   } || log-error 'Could not install gRPC tooling for Go!'
 
-  pip3 install --user \
-    grpcio \
-    grpcio-tools \
+  sudo apt-get install -y \
+    python3-grpcio \
+    python3-grpc-tools \
   || log-error 'Could not install gRPC tooling for Python!'
 }
