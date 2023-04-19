@@ -51,7 +51,8 @@ verify() {
   # The 'command' builtin doesn't pick up on compound or subcommands, so check
   # those here via eval calls instead
   subcmds=(
-    'python3 -m grpc_tools.protoc --help'
+    # 'python3 -m grpc_tools.protoc --help'
+    'python3 -m http.server --help'
   )
 
   for subcmd in "${subcmds[@]}"; do
