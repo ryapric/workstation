@@ -34,7 +34,7 @@ done
 #   alias docker-compose='sudo podman-compose '
 # fi
 
-alias aws-azure-login="docker run --rm -it -v ${HOME}/.aws:/root/.aws docker.io/sportradar/aws-azure-login:latest "
+alias aws-azure-login="npx aws-azure-login --no-prompt "
 alias cfn='aws cloudformation '
 alias dsp='docker system prune'
 alias dspv='docker system prune --volumes'
