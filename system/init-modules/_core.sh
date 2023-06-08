@@ -12,11 +12,13 @@ init-core() {
     bats \
     blueman \
     bluez \
+    build-essential \
     curl \
     git \
     gnupg2 \
     htop \
     jq \
+    lintian \
     lsb-release \
     make \
     net-tools \
