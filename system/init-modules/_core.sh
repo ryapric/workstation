@@ -44,7 +44,7 @@ init-core() {
 bump-to-debian-unstable() {
   log-info 'Bumping OS to Debian Sid/Unstable...'
 
-   # TODO: There's a lot of root calls here, so it's all a single string call.
+  # TODO: There's a lot of root calls here, so it's all a single string call.
   # There are myriad ways I could do this instead, but this works right now, so.
   sudo bash -c '
   export DEBIAN_FRONTEND=noninteractive

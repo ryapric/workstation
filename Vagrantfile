@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  box = "debian/bullseye64"
+  box = "debian/bookworm64"
 
   cpus   = 4
   memory = 2048
