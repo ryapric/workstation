@@ -13,6 +13,7 @@ init-core() {
     blueman \
     bluez \
     build-essential \
+    cloc \
     curl \
     git \
     gnupg2 \
