@@ -46,7 +46,7 @@ alias vc='python3 -m venv --clear venv'
 
 ### Vars
 export AWS_DEFAULT_REGION='us-east-2'
-export AWS_PROFILE=default
+export AWS_PROFILE=ryapric
 [[ -f "${HOME}/.aws_var_overrides" ]] && source "${HOME}/.aws_var_overrides"
 
 export DOCKER_BUILDKIT=1
