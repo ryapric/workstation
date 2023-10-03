@@ -63,5 +63,6 @@ bump-to-debian-unstable() {
   # This dpkg option forces replacement of config files with the maintainer
   # versions; otherwise, a prompt appears
   apt-get -o Dpkg::Options::="--force-confnew" dist-upgrade -y
-  '
+  ' \
+  || log-error 'Failed to bump OS version to Debian Sid/Unstable!'
 }
