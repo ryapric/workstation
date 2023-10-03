@@ -36,6 +36,9 @@ init-core() {
     zsh \
   || log-error 'Failed to install some system packages!'
 
+  sudo apt-get autoclean
+  sudo apt-get autoremove -y
+
   log-info 'Adding directories that might need to be found later...'
   mkdir -p \
     "${HOME}/.local/bin" \

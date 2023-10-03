@@ -53,25 +53,17 @@ main() {
   # Core system utilities
   run init-core
 
-  # Desktop environment
-  run init-xfce4
-
-  # Browser(s)
-  run init-browsers
-
-  # Editor(s)
-  run init-vscode
-  # run init-nanorc
-
   # Shell
   run init-ohmyzsh
 
-  # Languages/toolchains
+  # Languages/toolchains (alphabetical, no preference)
+  run init-dotnet
   run init-go
-  run init-rust
+  run init-java
+  run init-protobuf-grpc
   run init-python
   run init-R
-  run init-protobuf-grpc
+  run init-rust
 
   # Containerization
   run init-docker
@@ -82,11 +74,25 @@ main() {
   # HashiCorp tooling, which I might split out later
   run init-hashicorp
 
-  # Gaming software
-  run init-gaming
+  # The following should only run if there is a display
+  if [[ -n "${DISPLAY:-}" ]] ; then
+    # Desktop environment
+    run init-xfce4
 
-  # Bluetooth behavior
-  run init-bluetooth
+    # Browser(s)
+    run init-browsers
+
+    # Editor(s)
+    run init-vscode
+    run init-Rstudio
+    # run init-nanorc
+
+    # Gaming software
+    run init-gaming
+
+    # Bluetooth behavior
+    run init-bluetooth
+  fi
 
   # Run dotfiles last, so they don't get replaced by installations etc.
   run init-dotfiles
@@ -102,6 +108,7 @@ main() {
   run check-errors
 
   # Run verification checks that installations/configurations went as expected
+  log-info 'Verifying system...'
   run verify
 
   log-info 'All done! Workstation is ready to use!'

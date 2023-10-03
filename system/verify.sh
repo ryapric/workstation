@@ -12,6 +12,7 @@ verify() {
     cargo
     code
     docker
+    dotnet
     firefox
     go
     ipython3
