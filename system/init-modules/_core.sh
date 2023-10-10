@@ -30,6 +30,7 @@ init-core() {
     ripgrep \
     rsync \
     shellcheck \
+    socat \
     software-properties-common \
     tmux \
     tree \
