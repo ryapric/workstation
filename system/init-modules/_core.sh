@@ -28,6 +28,7 @@ init-core() {
     postgresql-client \
     p7zip \
     ripgrep \
+    rlwrap \
     rsync \
     shellcheck \
     socat \
