@@ -6,6 +6,8 @@ init-core() {
 
   log-info 'Installing system utilities...'
   sudo apt-get update
+  # Install zstd first so apt warnings about it not being there go away
+  sudo apt-get install -y zstd
   sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
@@ -22,6 +24,7 @@ init-core() {
     lintian \
     lsb-release \
     make \
+    neofetch \
     net-tools \
     nmap \
     parallel \

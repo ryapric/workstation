@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
         # it's a barebones system. Note that the password-setting is only for
         # Vagrant, as it will have been set on install by the user on a real
         # machine -- don't do this IRL lol
-        useradd -G sudo -m ryan
+        useradd -G sudo -m ryan || true
         echo -e 'vagrant\nvagrant' | passwd ryan
         printf 'ryan ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/ryan
 

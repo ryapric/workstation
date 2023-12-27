@@ -6,20 +6,19 @@ rm -f "${cmdoutput_file}"
 touch "${cmdoutput_file}"
 
 verify() {
-  cmds=(
+  # Commands that should always be present, regardless of if the install has a
+  # display
+  cli_cmds=(
     bats
     buf
     cargo
-    code
     docker
     dotnet
-    firefox
     go
     ipython3
     irb
-    mupen64plus
-    mupen64plus-qt
     nano
+    neofetch
     packer
     parallel
     pip3
@@ -27,27 +26,44 @@ verify() {
     python3
     R
     Rscript
-    rstudio
     ruby
     rustc
     rustup
-    steam
     terraform
-    torbrowser-launcher
     vagrant
     vault
     # vboxmanage
     virsh
-    virt-manager
-    xfce4-about
-    xfce4-terminal
     zsh
   )
 
-  for cmd in "${cmds[@]}"; do
+  # Commands that should only be present if the install has a display
+  desktop_cmds=(
+    code
+    dolphin-emu
+    firefox
+    mupen64plus
+    mupen64plus-qt
+    obs
+    rstudio
+    steam
+    torbrowser-launcher
+    virt-manager
+    xfce4-about
+    xfce4-terminal
+  )
+
+  for cmd in "${cli_cmds[@]}"; do
     command -v "${cmd}" > /dev/null \
     || log-error "Command '${cmd}' expected to be available on \$PATH, but was not"
   done
+
+  if [[ -n "${DISPLAY:-}" ]] ; then
+    for cmd in "${desktop_cmds[@]}"; do
+      command -v "${cmd}" > /dev/null \
+      || log-error "Command '${cmd}' expected to be available on \$PATH, but was not"
+    done
+  fi
 
   # The 'command' builtin doesn't pick up on compound or subcommands, so check
   # those here via eval calls instead
@@ -61,5 +77,5 @@ verify() {
     || log-error "Compound or subcommand '${subcmd}' expected to succeed, but failed. Review log file '${cmdoutput_file}' for details."
   done
 
-  check-errors
+  check-errors && log-info 'All good!'
 }

@@ -59,7 +59,7 @@ main() {
   # Languages/toolchains (alphabetical, no preference)
   run init-dotnet
   run init-go
-  run init-java
+  # run init-java
   run init-protobuf-grpc
   run init-python
   run init-R
@@ -90,6 +90,9 @@ main() {
     # Gaming software
     run init-gaming
 
+    # Recording/streaming software
+    run init-obs-studio
+
     # Bluetooth behavior
     run init-bluetooth
   fi
@@ -100,6 +103,8 @@ main() {
   # ============================================================================
 
   # Cleanup
+  sudo apt-get clean
+  sudo apt-get autoclean
   sudo apt-get autoremove -y
 
   # ============================================================================

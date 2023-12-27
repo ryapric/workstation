@@ -3,10 +3,10 @@ set -euo pipefail
 
 init-dotfiles() {
   log-info 'Setting up dotfiles repo...'
-  if [[ -d /vagrant/dotfiles ]] ; then
-    log-info 'Found mounted repo, '
+  if [[ -d /tmp/dotfiles ]] ; then
+    log-info 'Found Vagrant-provided repo, /tmp/dotfiles'
     mkdir -p "${HOME}"/repos/ryapric/workstation
-    sudo cp -r /vagrant/* "${HOME}"/repos/ryapric/workstation/
+    sudo cp -r /tmp/{system,dotfiles} "${HOME}"/repos/ryapric/workstation/
     sudo chown -R ryan:ryan "${HOME}"/repos/ryapric/workstation/
   else
     if [[ ! -d "${HOME}"/repos/ryapric/workstation ]] ; then

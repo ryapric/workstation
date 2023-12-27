@@ -11,6 +11,7 @@ init-dotnet() {
   curl -fsSL -o /tmp/msft.deb 'https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb'
   sudo dpkg -i /tmp/msft.deb
   rm -f /tmp/msft.deb
+  sudo apt-get update
 
   dotnet_version="$(
     apt-cache search dotnet-sdk \
