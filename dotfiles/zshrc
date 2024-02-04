@@ -28,12 +28,6 @@ for p in \
 done
 
 ### Aliases
-# if grep -q 'sid' /etc/*-release; then
-#   printf 'Debian Sid detected; assuming you are using Podman, and will alias "docker" to that\n'
-#   alias docker='sudo podman '
-#   alias docker-compose='sudo podman-compose '
-# fi
-
 alias aws-azure-login="npx aws-azure-login --no-prompt "
 alias cfn='aws cloudformation '
 alias dsp='docker system prune'
@@ -54,12 +48,22 @@ export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 # export VAGRANT_EXPERIMENTAL="disks"
 export VAGRANT_DEFAULT_PROVIDER=libvirt
 
+# VSCode is so fucking stupid, and needs this undocumented var for actually
+# opening a Remote
+export WSL_DISTRO_NAME='debian'
+
 ### Completions
 if command -v kubectl > /dev/null; then
   source <(kubectl completion zsh)
 fi
 
 ### Functions
+git-branch-cleanup() {
+  git fetch --prune 2>&1 \
+  | awk '{ gsub(/origin\//, "", $5) ; print $5 }' \
+  | xargs -I{} git branch -D || true
+}
+
 get-apt-key() {
   [[ -z "${1}" ]] && { printf 'Must specify GPG key URL as first argument\n' && return 1; }
   [[ -z "${2}" ]] && { printf 'Must specify GPG key file name as second argument\n' && return 1; }
@@ -76,7 +80,7 @@ get-apt-key() {
   printf 'Stored GPG key material in /etc/apt/trusted.gpg.d/%s\n' "${keyfile}"
 }
 
-# Handy SQLite func for operating directly on CSVs
+# Quick-and-dirty but handy SQLite func for operating directly on CSVs
 csvql() {
   sqlite3 \
     ':memory:' \
@@ -84,6 +88,25 @@ csvql() {
     -cmd ".import $1 data" \
     -cmd '.mode column' \
     "${2}"
+}
+
+github-super-linter() {
+  local result=0
+
+  docker run \
+    --rm \
+    -it \
+    -e RUN_LOCAL=true \
+    -e USE_FIND_ALGORITHM=true \
+    -e IGNORE_GITIGNORED_FILES=true \
+    -e FILTER_REGEX_EXCLUDE='.*testdata/.*|.*vendor/.*|.*\.vmdk|.*\.ovf|.*\.box|.*\.iso' \
+    -e VALIDATE_NATURAL_LANGUAGE=false \
+    -e VALIDATE_GO_MODULES=true \
+    -v "${PWD}":/tmp/lint \
+    ghcr.io/super-linter/super-linter:slim-v5 \
+  || result="$?"
+
+  return "${result}"
 }
 
 ### THE FOLLOWING NEED TO RUN LAST
