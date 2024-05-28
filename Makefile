@@ -3,7 +3,7 @@
 system-config:
 	@bash ./system/_main.sh
 
-dotfiles-link:
+dotfiles-setup:
 	@make -C ./dotfiles -s setup
 
 test-run:
