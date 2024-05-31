@@ -1,0 +1,43 @@
+---
+- name: 'Desktop system initialization'
+  hosts: 'localhost'
+  remote_user: 'root'
+
+  vars:
+    user: 'ryan'
+    debian_release_alias: 'bookworm'
+    apt_repos:
+      - name: vscode
+        apt_repo_source: 'https://packages.microsoft.com/repos/code'
+        key_url: 'https://packages.microsoft.com/keys/microsoft.asc'
+        suite: 'stable'
+        component: 'main'
+        packages:
+          - 'code'
+
+  tasks:
+
+    - name: 'Add Debian repos'
+      become: true
+      ansible.builtin.deb822_repository:
+        name: '{{ item.name }}'
+        types: 'deb'
+        uris: '{{ item.apt_repo_source }}'
+        suites: '{{ item.suite }}'
+        components: '{{ item.component }}'
+        signed_by: '{{ item.key_url }}'
+      loop: '{{ apt_repos }}'
+
+    - name: 'Update APT cache using new repos'
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: 'Install packages from new repos'
+      become: true
+      ansible.builtin.apt:
+        pkg: '{{ item.packages }}'
+        autoclean: true
+        autoremove: true
+        clean: true
+      loop: '{{ apt_repos }}'

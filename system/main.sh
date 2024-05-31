@@ -58,8 +58,6 @@ sudo -u ryan make -C "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" system-config
 # fi
 
 # main() {
-#   # Core system utilities
-#   run init-core
 
 #   # Shell
 #   run init-ohmyzsh

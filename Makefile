@@ -1,3 +1,5 @@
+SHELL := /usr/bin/env bash
+
 .PHONY: %
 
 ansible_dir := ./system/ansible
@@ -11,7 +13,10 @@ system-config:
 	ansible-lint $(debian_unstable_playbook)
 	ansible-playbook $(debian_unstable_playbook)
 	ansible-lint $(main_playbook)
-	ansible-playbook $(main_playbook)
+	ansible-playbook --skip-tags 'desktop-only' $(main_playbook)
+
+system-config-desktop-only:
+	ansible-playbook --tags 'desktop-only' $(main_playbook)
 
 dotfiles-setup:
 	@make -C ./dotfiles -s setup

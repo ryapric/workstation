@@ -1,15 +1,16 @@
 ---
-- name: 'Initialization'
-  remote_user: 'root'
+- name: 'Core system initialization'
   hosts: 'localhost'
+  remote_user: 'root'
 
   vars:
     user: 'ryan'
     debian_release_alias: 'bookworm'
     apt_repos:
       - name: docker
-        key_url: 'https://download.docker.com/linux/debian/gpg'
         apt_repo_source: 'https://download.docker.com/linux/debian'
+        key_url: 'https://download.docker.com/linux/debian/gpg'
+        suite: '{{ debian_release_alias }}'
         component: 'stable'
         packages:
           - 'docker-ce'
@@ -17,8 +18,9 @@
           - 'containerd.io'
           - 'docker-compose-plugin'
       - name: hashicorp
-        key_url: 'https://apt.releases.hashicorp.com/gpg'
         apt_repo_source: 'https://apt.releases.hashicorp.com'
+        key_url: 'https://apt.releases.hashicorp.com/gpg'
+        suite: '{{ debian_release_alias }}'
         component: 'main'
         packages:
           - 'packer'
@@ -78,7 +80,7 @@
         name: '{{ item.name }}'
         types: 'deb'
         uris: '{{ item.apt_repo_source }}'
-        suites: '{{ debian_release_alias }}'
+        suites: '{{ item.suite }}'
         components: '{{ item.component }}'
         signed_by: '{{ item.key_url }}'
       loop: '{{ apt_repos }}'
@@ -96,3 +98,20 @@
         autoremove: true
         clean: true
       loop: '{{ apt_repos }}'
+
+    # Adding later in the Task list to make sure we can add user to the Docker
+    # group once it's installed
+    - name: 'Add user'
+      become: true
+      ansible.builtin.user:
+        name: '{{ user }}'
+        group: '{{ user }}'
+        groups:
+          - docker
+        append: true
+        create_home: true
+        state: 'present'
+
+- name: 'Run desktop system initialization'
+  ansible.builtin.import_playbook: 'desktop.yaml'
+  tags: [desktop-only]
