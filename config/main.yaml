@@ -1,0 +1,92 @@
+---
+- name: 'Initialization'
+  remote_user: 'root'
+  hosts: 'localhost'
+
+  vars:
+    user: 'ryan'
+    debian_release_alias: 'bookworm'
+    apt_repos:
+      - name: docker
+        key_url: 'https://download.docker.com/linux/debian/gpg'
+        apt_repo_source: 'https://download.docker.com/linux/debian'
+        component: 'stable'
+        packages:
+          - 'docker-ce'
+          - 'docker-ce-cli'
+          - 'containerd.io'
+          - 'docker-compose-plugin'
+      - name: hashicorp
+        key_url: 'https://apt.releases.hashicorp.com/gpg'
+        apt_repo_source: 'https://apt.releases.hashicorp.com'
+        component: 'main'
+        packages:
+          - 'packer'
+          - 'terraform'
+          - 'vagrant'
+          - 'vagrant-libvirt'
+          - 'vault'
+
+  tasks:
+
+    - name: 'Update APT cache'
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: 'Install core packages'
+      ansible.builtin.apt:
+        pkg:
+          - 'apt-transport-https'
+          - 'ca-certificates'
+          - 'bats'
+          - 'blueman'
+          - 'bluez'
+          - 'build-essential'
+          - 'cloc'
+          - 'curl'
+          - 'git'
+          - 'gnupg2'
+          - 'htop'
+          - 'jq'
+          - 'lintian'
+          - 'lsb-release'
+          - 'make'
+          - 'neofetch'
+          - 'net-tools'
+          - 'nmap'
+          - 'parallel'
+          - 'postgresql-client'
+          - 'python3-debian'
+          - 'p7zip'
+          - 'ripgrep'
+          - 'rlwrap'
+          - 'rsync'
+          - 'shellcheck'
+          - 'socat'
+          - 'software-properties-common'
+          - 'tmux'
+          - 'tree'
+          - 'zsh'
+        autoclean: true
+        autoremove: true
+
+    - name: 'Add Debian repos'
+      ansible.builtin.deb822_repository:
+        name: '{{ item.name }}'
+        types: 'deb'
+        uris: '{{ item.apt_repo_source }}'
+        suites: '{{ debian_release_alias }}'
+        components: '{{ item.component }}'
+        signed_by: '{{ item.key_url }}'
+      loop: '{{ apt_repos }}'
+
+    - name: 'Update APT cache using new repos'
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: 'Install packages from new repos'
+      ansible.builtin.apt:
+        pkg: '{{ item.packages }}'
+        autoclean: true
+        autoremove: true
+      loop: '{{ apt_repos }}'

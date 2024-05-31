@@ -29,6 +29,7 @@ init-core() {
     nmap \
     parallel \
     postgresql-client \
+    python3-debian \
     p7zip \
     ripgrep \
     rlwrap \
