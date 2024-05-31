@@ -30,10 +30,12 @@
   tasks:
 
     - name: 'Update APT cache'
+      become: true
       ansible.builtin.apt:
         update_cache: true
 
     - name: 'Install core packages'
+      become: true
       ansible.builtin.apt:
         pkg:
           - 'apt-transport-https'
@@ -71,6 +73,7 @@
         autoremove: true
 
     - name: 'Add Debian repos'
+      become: true
       ansible.builtin.deb822_repository:
         name: '{{ item.name }}'
         types: 'deb'
@@ -81,12 +84,15 @@
       loop: '{{ apt_repos }}'
 
     - name: 'Update APT cache using new repos'
+      become: true
       ansible.builtin.apt:
         update_cache: true
 
     - name: 'Install packages from new repos'
+      become: true
       ansible.builtin.apt:
         pkg: '{{ item.packages }}'
         autoclean: true
         autoremove: true
+        clean: true
       loop: '{{ apt_repos }}'
