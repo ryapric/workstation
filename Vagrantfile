@@ -21,19 +21,20 @@ Vagrant.configure("2") do |config|
   config.vm.define "ws" do |ws|
     ws.vm.box = box
     ws.vm.synced_folder ".", "/vagrant", disabled: true
-    ws.vm.provision "file", source: "./system", destination: "/tmp/system"
-    ws.vm.provision "file", source: "./dotfiles", destination: "/tmp/dotfiles"
+    ws.vm.provision "file", source: "./Makefile", destination: "/tmp/workstation/Makefile"
+    ws.vm.provision "file", source: "./system", destination: "/tmp/workstation/system"
+    ws.vm.provision "file", source: "./dotfiles", destination: "/tmp/workstation/dotfiles"
     ws.vm.provision "shell",
       inline: <<-SCRIPT
         # Vagrant boot needs some redundant love before the main script, since
-        # it's a barebones system. Note that the password-setting is only for
-        # Vagrant, as it will have been set on install by the user on a real
+        # it's a barebones system. Note that the password-setting is also only
+        # for Vagrant, as it will have been set on install by the user on a real
         # machine -- don't do this IRL lol
         useradd -G sudo -m ryan || true
         echo -e 'vagrant\nvagrant' | passwd ryan
         printf 'ryan ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/ryan
 
-        sudo -u ryan bash /tmp/system/main.sh
+        TESTING=true bash /tmp/workstation/system/main.sh
       SCRIPT
   end
 

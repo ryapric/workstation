@@ -1,0 +1,20 @@
+- name: 'Remove old sources.list'
+  become: true
+  ansible.builtin.file:
+    path: '/etc/apt/sources.list'
+    state: 'absent'
+
+- name: 'Add Debian Sid sources.list'
+  become: true
+  ansible.builtin.copy:
+    content: 'deb http://deb.debian.org/debian unstable main contrib non-free non-free-firmware'
+    dest: '/etc/apt/sources.list'
+    mode: 'preserve'
+
+- name: 'Upgrade system'
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: 'full'
+    autoclean: true
+    autoremove: true

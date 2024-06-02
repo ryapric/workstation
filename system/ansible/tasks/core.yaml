@@ -1,0 +1,203 @@
+- name: 'Update APT cache'
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: 'Install zstd so APT stops complaining'
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - 'zstd'
+    state: 'present'
+
+- name: 'Install core & development packages'
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - 'apt-transport-https'
+      - 'bats'
+      - 'blueman'
+      - 'bluez'
+      - 'bridge-utils'
+      - 'build-essential'
+      - 'ca-certificates'
+      - 'cloc'
+      - 'curl'
+      - 'firefox'
+      - 'git'
+      - 'gnupg2'
+      - 'htop'
+      - 'ipython3'
+      - 'jq'
+      - 'libclang-dev'
+      - 'libssl-dev'
+      - 'libvirt-daemon-system'
+      - 'libvirt-daemon-system'
+      - 'lintian'
+      - 'lsb-release'
+      - 'make'
+      - 'neofetch'
+      - 'net-tools'
+      - 'nmap'
+      - 'obs-studio'
+      - 'p7zip'
+      - 'parallel'
+      - 'postgresql-client'
+      - 'protobuf-compiler'
+      - 'python3-debian'
+      - 'python3-pip'
+      - 'python3-venv'
+      - 'qemu-system'
+      - 'r-base-dev'
+      - 'r-base'
+      - 'ripgrep'
+      - 'rlwrap'
+      - 'rsync'
+      - 'shellcheck'
+      - 'socat'
+      - 'software-properties-common'
+      - 'tmux'
+      - 'torbrowser-launcher'
+      - 'tree'
+      - 'vagrant-libvirt'
+      - 'virt-manager'
+      - 'virt-manager'
+      - 'zsh'
+    autoclean: true
+    autoremove: true
+    state: 'present'
+
+- name: 'Add Debian repos'
+  become: true
+  ansible.builtin.deb822_repository:
+    name: '{{ item.name }}'
+    types: 'deb'
+    uris: '{{ item.apt_repo_source }}'
+    suites: '{{ item.suite }}'
+    components: '{{ item.component }}'
+    signed_by: '{{ item.key_url }}'
+  loop: '{{ apt_repos }}'
+
+- name: 'Install packages from new repos'
+  become: true
+  ansible.builtin.apt:
+    pkg: '{{ item.packages }}'
+    update_cache: true
+    autoclean: true
+    autoremove: true
+    clean: true
+  loop: '{{ apt_repos }}'
+
+# Adding later in the Task list to make sure we can add user to other groups
+# once they exist (like Docker, sudo, etc.)
+- name: 'Add user'
+  become: true
+  ansible.builtin.user:
+    name: '{{ user }}'
+    group: '{{ user }}'
+    groups:
+      - docker
+      - libvirt
+      - sudo
+    append: true
+    create_home: true
+    shell: '/usr/bin/zsh'
+    state: 'present'
+
+- name: 'Add user config for sudoers file'
+  become: true
+  ansible.builtin.copy:
+    content: '{{ user }} ALL=(ALL) NOPASSWD:ALL'
+    dest: '/etc/sudoers.d/{{ user }}'
+    mode: '0600'
+
+- name: 'Install Oh My Zsh'
+  become: true
+  become_user: '{{ user }}'
+  ansible.builtin.shell:
+    cmd: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+    creates: '/home/{{ user }}/.oh-my-zsh'
+
+- name: 'Check if /tmp/workstation exists from test run'
+  ansible.builtin.stat:
+    path: '/tmp/workstation'
+  register: src_repo_in_tmp
+
+- name: 'Copy workstation repo to homedir if on test host'
+  become: true
+  become_user: '{{ user }}'
+  ansible.builtin.copy:
+    # 'remote' meaning the target machine, even though it's localhost -- without
+    # this option, copy is UNBELIEVABLY SLOOOWWW (like, several orders of
+    # magnitude slower) because it's sending it through an unneeded network
+    # medium in some goofy way
+    remote_src: true
+    src: '/tmp/workstation'
+    dest: '/home/{{ user }}/repos'
+    owner: '{{ user }}'
+    group: '{{ user }}'
+    mode: 'preserve'
+  when: src_repo_in_tmp.stat.exists
+
+# # TODO: make this work
+# - name: 'Configure git directory since it isn't on the test host' # noqa: no-changed-when
+#   become: true
+#   become_user: '{{ user }}'
+#   ansible.builtin.command:
+#     cmd: |
+#       cd /home/{{ user }}/workstation
+#       git config --global init.defaultBranch main
+#       git init
+#       git remote add origin https://github.com/ryapric/workstation.git
+#       git fetch origin
+#       git checkout main
+#       git pull
+
+- name: 'Clone workstation repo to homedir if it is not on host yet'
+  become: true
+  become_user: '{{ user }}'
+  ansible.builtin.git:
+    repo: 'https://github.com/ryapric/workstation.git'
+    dest: '/home/{{ user }}/repos/workstation'
+    version: 'main'
+  when: not src_repo_in_tmp.stat.exists
+
+- name: 'Run dotfiles setup for user'
+  become: true
+  become_user: '{{ user }}'
+  ansible.builtin.command:
+    cmd: 'make -C /home/{{ user }}/repos/workstation dotfiles-setup' # noqa: no-changed-when
+
+# Note: not using get_url module because the dest is a temp directory, and so
+# the module would re-run after every reboot
+- name: 'Install Rust' # noqa: no-changed-when command-instead-of-module
+  become: true
+  become_user: '{{ user }}'
+  ansible.builtin.shell:
+    cmd: |
+      curl -fsSL -o /tmp/rustup-init https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
+      chmod +x /tmp/rustup-init
+      /tmp/rustup-init -y
+      rm /tmp/rustup-init
+    creates: '/home/{{ user }}/.cargo/bin'
+
+# TODO: this works but is a lot of shell code, fix this later. Unfortunately,
+# though, this is how MSFT's docs tell you to do it (a la installing the key &
+# source via a deb package you download)
+- name: 'Install Dotnet Core' # noqa: no-changed-when command-instead-of-module risky-shell-pipe
+  become: true
+  ansible.builtin.shell:
+    cmd: |
+      curl -fsSL -o /tmp/msft.deb 'https://packages.microsoft.com/config/debian/{{ debian_release_number }}/packages-microsoft-prod.deb'
+      sudo dpkg -i /tmp/msft.deb
+      apt-get update
+
+      dotnet_version="$(
+        apt-cache search dotnet-sdk \
+        | grep -E '^dotnet-sdk' \
+        | sort \
+        | tail -n1 \
+        | awk '{ print $1 }'
+      )"
+      apt-get install -y "${dotnet_version}"
+    creates: '/usr/bin/dotnet'

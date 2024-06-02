@@ -1,0 +1,87 @@
+- name: 'Check for i386 architecture enablement for Steam'
+  become: true
+  ansible.builtin.command:
+    cmd: 'dpkg --print-foreign-architectures' # noqa: no-changed-when
+  register: foreign_arch
+
+- name: 'Enable i386 arch if needed'
+  become: true
+  ansible.builtin.command:
+    cmd: 'dpkg --add-architecture i386' # noqa: no-changed-when
+  when: '"i386" not in foreign_arch.stdout_lines'
+
+- name: 'Install available packages for desktop-only software'
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - 'blueman'
+      - 'bluez'
+      - 'dolphin-emu-data'
+      - 'dolphin-emu'
+      - 'mupen64plus-*'
+      - 'steam-devices'
+      - 'steam-installer'
+      - 'xfce4'
+      - 'xfce4-goodies'
+    update_cache: true
+    autoclean: true
+    autoremove: true
+    state: 'present'
+
+- name: 'Add Debian repos'
+  become: true
+  ansible.builtin.deb822_repository:
+    name: '{{ item.name }}'
+    types: 'deb'
+    uris: '{{ item.apt_repo_source }}'
+    suites: '{{ item.suite }}'
+    components: '{{ item.component }}'
+    signed_by: '{{ item.key_url }}'
+  loop: '{{ apt_repos_desktop_only }}'
+
+- name: 'Install packages from new repos'
+  become: true
+  ansible.builtin.apt:
+    pkg: '{{ item.packages }}'
+    update_cache: true
+    autoclean: true
+    autoremove: true
+    clean: true
+  loop: '{{ apt_repos_desktop_only }}'
+
+- name: 'Check if RStudio is installed'
+  ansible.builtin.stat:
+    path: '/usr/bin/rstudio'
+  register: rstudio_path
+
+- name: 'Install RStudio' # noqa: risky-shell-pipe
+  become: true
+  ansible.builtin.shell:
+    cmd: |
+      rstudio_dl_link="$(
+      curl -fsSL 'https://posit.co/download/rstudio-desktop/' \
+        | grep -E -o '"https.*amd64\.deb"' \
+        | tail -n1 \
+        | sed 's/"//g'
+      )"
+      curl -fsSL -o /tmp/rstudio.deb "${rstudio_dl_link}"
+      apt-get install -y /tmp/rstudio.deb
+    creates: '/usr/bin/rstudio'
+  when: not rstudio_path.stat.exists
+
+- name: 'Make game ROMs directory'
+  become: true
+  become_user: '{{ user }}'
+  ansible.builtin.file:
+    path: '/home/{{ user }}/GameROMs'
+    mode: '0755'
+    state: 'directory'
+
+# ERTM is a feature that, among other things, prevents XBox controllers from
+# pairing over BT lol. So, disable it.
+- name: 'Change bluetooth settings for XBox controllers'
+  become: true
+  ansible.builtin.copy:
+    content: 'options bluetooth disable_ertm=1'
+    dest: '/etc/modprobe.d/xbox_bt.conf'
+    mode: '0644'
