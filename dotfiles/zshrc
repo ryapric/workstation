@@ -64,22 +64,6 @@ git-branch-cleanup() {
   | xargs -I{} git branch -D || true
 }
 
-get-apt-key() {
-  [[ -z "${1}" ]] && { printf 'Must specify GPG key URL as first argument\n' && return 1; }
-  [[ -z "${2}" ]] && { printf 'Must specify GPG key file name as second argument\n' && return 1; }
-  local url="${1}"
-  local keyfile="${2}"
-  curl -fsSL "${url}" > /tmp/"${keyfile}"
-  if file /tmp/"${keyfile}" | grep '(old)'; then
-    printf 'ASCII GPG format found; dearmoring first\n'
-    sudo sh -c "cat /tmp/${keyfile} | gpg --dearmor > /etc/apt/trusted.gpg.d/${keyfile}"
-  else
-    printf 'GPG binary format found, adding key directly\n'
-    sudo cp /tmp/"${keyfile}" /etc/apt/trusted.gpg.d/"${keyfile}"
-  fi
-  printf 'Stored GPG key material in /etc/apt/trusted.gpg.d/%s\n' "${keyfile}"
-}
-
 # Quick-and-dirty but handy SQLite func for operating directly on CSVs
 csvql() {
   sqlite3 \
