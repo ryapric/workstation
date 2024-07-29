@@ -31,6 +31,13 @@
           - 'vagrant'
           - 'vagrant-libvirt'
           - 'vault'
+      - name: github-cli
+        apt_repo_source: 'https://cli.github.com/packages'
+        key_url: 'https://cli.github.com/packages/githubcli-archive-keyring.gpg'
+        suite: 'stable'
+        component: 'main'
+        packages:
+          - 'gh'
     apt_repos_desktop_only:
       - name: vscode
         apt_repo_source: 'https://packages.microsoft.com/repos/code'
