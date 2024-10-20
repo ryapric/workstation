@@ -1,62 +1,62 @@
 ---
-- name: 'Initialization'
-  hosts: 'localhost'
-  remote_user: 'root'
+- name: "Initialization"
+  hosts: "localhost"
+  remote_user: "root"
 
   vars:
-    user: 'ryan'
+    user: "ryan"
     # Need a few Debian vars instead of using Facts, because we're running
     # Debian Unstable and that can't always be interpolated into repo sources
-    debian_release_number: '12'
-    debian_release_alias: 'bookworm'
+    debian_release_number: "12"
+    debian_release_alias: "bookworm"
     apt_repos:
       - name: docker
-        apt_repo_source: 'https://download.docker.com/linux/debian'
-        key_url: 'https://download.docker.com/linux/debian/gpg'
-        suite: '{{ debian_release_alias }}'
-        component: 'stable'
+        apt_repo_source: "https://download.docker.com/linux/debian"
+        key_url: "https://download.docker.com/linux/debian/gpg"
+        suite: "{{ debian_release_alias }}"
+        component: "stable"
         packages:
-          - 'docker-ce'
-          - 'docker-ce-cli'
-          - 'containerd.io'
-          - 'docker-compose-plugin'
+          - "docker-ce"
+          - "docker-ce-cli"
+          - "containerd.io"
+          - "docker-compose-plugin"
       - name: hashicorp
-        apt_repo_source: 'https://apt.releases.hashicorp.com'
-        key_url: 'https://apt.releases.hashicorp.com/gpg'
-        suite: '{{ debian_release_alias }}'
-        component: 'main'
+        apt_repo_source: "https://apt.releases.hashicorp.com"
+        key_url: "https://apt.releases.hashicorp.com/gpg"
+        suite: "{{ debian_release_alias }}"
+        component: "main"
         packages:
-          - 'packer'
-          - 'terraform'
-          - 'vagrant'
-          - 'vagrant-libvirt'
-          - 'vault'
+          - "packer"
+          - "terraform"
+          - "vagrant"
+          - "vagrant-libvirt"
+          - "vault"
       - name: github-cli
-        apt_repo_source: 'https://cli.github.com/packages'
-        key_url: 'https://cli.github.com/packages/githubcli-archive-keyring.gpg'
-        suite: 'stable'
-        component: 'main'
+        apt_repo_source: "https://cli.github.com/packages"
+        key_url: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
+        suite: "stable"
+        component: "main"
         packages:
-          - 'gh'
+          - "gh"
     apt_repos_desktop_only:
       - name: vscode
-        apt_repo_source: 'https://packages.microsoft.com/repos/code'
-        key_url: 'https://packages.microsoft.com/keys/microsoft.asc'
-        suite: 'stable'
-        component: 'main'
+        apt_repo_source: "https://packages.microsoft.com/repos/code"
+        key_url: "https://packages.microsoft.com/keys/microsoft.asc"
+        suite: "stable"
+        component: "main"
         packages:
-          - 'code'
+          - "code"
 
   tasks:
-    - name: 'Upgrade to Debian Sid/Unstable'
+    - name: "Upgrade to Debian Sid/Unstable"
       ansible.builtin.include_tasks:
-        file: './tasks/debian-unstable.yaml'
-    - name: 'Run core system initialization'
+        file: "./tasks/debian-unstable.yaml"
+    - name: "Run core system initialization"
       ansible.builtin.include_tasks:
-        file: './tasks/core.yaml'
-    - name: 'Run desktop system initialization'
+        file: "./tasks/core.yaml"
+    - name: "Run desktop system initialization"
       ansible.builtin.include_tasks:
-        file: './tasks/desktop-only.yaml'
+        file: "./tasks/desktop-only.yaml"
         apply:
           tags: [desktop-only]
       tags: [desktop-only]
