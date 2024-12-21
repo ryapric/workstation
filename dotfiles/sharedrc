@@ -65,6 +65,11 @@ export VAGRANT_DEFAULT_PROVIDER=libvirt
 export WSL_DISTRO_NAME='debian'
 
 ### Completions
+if [[ "${SHELL}" =~ bash ]]; then
+  bind 'set show-all-if-ambiguous on'
+  bind 'TAB:menu-complete'
+  bind '"\e[Z":menu-complete-backward'
+fi
 # TODO: make this dynamic based on shell
 # if command -v kubectl > /dev/null; then
 #   source <(kubectl completion zsh)
