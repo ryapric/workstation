@@ -34,6 +34,7 @@ alias vc='python3 -m venv --clear venv'
 alias agud='sudo apt update && sudo apt dist-upgrade && sudo apt autoremove && sudo apt autoclean'
 # Git aliases
 alias gst='git status'
+alias gco='git checkout '
 alias gl='git pull'
 alias gc='git commit '
 alias gp='git push'
