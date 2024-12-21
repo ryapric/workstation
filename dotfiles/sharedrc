@@ -5,6 +5,8 @@
 # (.bashrc, .zshrc, etc).
 ################################################################################
 
+source ~/.git-prompt.sh
+
 ### PATH
 for p in \
   "${HOME}/.local/bin" \
@@ -18,6 +20,14 @@ for p in \
     export PATH="${p}:${PATH}"
   fi
 done
+
+### Shell prompt
+# Built with help from: https://bash-prompt-generator.org/
+PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)")'
+GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWSTASHSTATE=true
+GIT_PS1_SHOWUNTRACKEDFILES=true
+PS1="\[\e[92m\]\u@\h \[\e[96m\]\w\[\e[93m\]${PS1_CMD1}\[\e[0m\] [\[\e[91m\]$?\[\e[0m\]]\n>> "
 
 ### Aliases
 alias aws-azure-login="npx aws-azure-login@3.6.4 --no-prompt "

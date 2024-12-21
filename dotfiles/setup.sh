@@ -38,3 +38,6 @@ while read -r line; do
   fi
 
 done < /tmp/map.txt
+
+# Add the git-status shell prompt helper to the homedir, since the prompt uses it
+curl -fsSL -o "${HOME}/.git-prompt.sh" 'https://raw.githubusercontent.com/git/git/refs/heads/master/contrib/completion/git-prompt.sh'
