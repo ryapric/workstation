@@ -15,6 +15,7 @@
   ansible.builtin.apt:
     pkg:
       - "apt-transport-https"
+      - "bash-completion"
       - "bats"
       - "blueman"
       - "bluez"
