@@ -1,0 +1,6 @@
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
+
+[tools]
+go = "1.25.0"
+uv = "0.8.14"

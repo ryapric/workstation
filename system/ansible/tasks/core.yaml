@@ -1,4 +1,5 @@
-- name: "Remove custom sources files (will be replaced later)"
+# We do this to make earlier APT updates faster until we need those repos
+- name: "Remove custom APT sources files"
   become: true
   ansible.builtin.deb822_repository:
     name: "{{ item.name }}"

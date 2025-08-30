@@ -2,6 +2,7 @@
 # Don't quote vars, it'll break the while-loop read
 
 bashrc          ${HOME}/.bashrc          link
+config/mise     ${HOME}/.config/         link
 sharedrc        ${HOME}/.sharedrc        link
 sharedrc-final  ${HOME}/.sharedrc-final  link
 tmux.conf       ${HOME}/.tmux.conf       link
