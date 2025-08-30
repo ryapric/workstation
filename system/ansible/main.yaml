@@ -5,14 +5,14 @@
 
   vars:
     user: "ryan"
-    # Need a few Debian vars instead of using Facts, because we're running
-    # Debian Unstable and that can't always be interpolated into repo sources
-    debian_release_number: "12"
-    debian_release_alias: "bookworm"
+    # Need a few Debian vars instead of using Facts, because we're running Debian Unstable and that
+    # can't always be interpolated into repo sources
+    debian_release_number: "13"
+    debian_release_alias: "trixie"
     apt_repos:
-      - name: docker
-        apt_repo_source: "https://download.docker.com/linux/debian"
-        key_url: "https://download.docker.com/linux/debian/gpg"
+      - name: "docker"
+        uri: "https://download.docker.com/linux/debian"
+        key_uri: "https://download.docker.com/linux/debian/gpg"
         suite: "{{ debian_release_alias }}"
         component: "stable"
         packages:
@@ -20,9 +20,16 @@
           - "docker-ce-cli"
           - "containerd.io"
           - "docker-compose-plugin"
-      - name: hashicorp
-        apt_repo_source: "https://apt.releases.hashicorp.com"
-        key_url: "https://apt.releases.hashicorp.com/gpg"
+      - name: "kubernetes"
+        uri: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/"
+        key_uri: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key"
+        suite: "/" # yes, just a slash
+        component: "" # yes, nothing
+        packages:
+          - "kubectl"
+      - name: "hashicorp"
+        uri: "https://apt.releases.hashicorp.com"
+        key_uri: "https://apt.releases.hashicorp.com/gpg"
         suite: "{{ debian_release_alias }}"
         component: "main"
         packages:
@@ -31,14 +38,21 @@
           - "vagrant"
           - "vagrant-libvirt"
           - "vault"
-      - name: github-cli
-        apt_repo_source: "https://cli.github.com/packages"
-        key_url: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
+      - name: "github-cli"
+        uri: "https://cli.github.com/packages"
+        key_uri: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
         suite: "stable"
         component: "main"
         packages:
           - "gh"
-    apt_repos_desktop_only:
+      - name: "mise"
+        uri: "https://mise.jdx.dev/deb"
+        key_uri: "https://mise.jdx.dev/gpg-key.pub"
+        suite: "stable"
+        component: "main"
+        packages:
+          - "mise"
+    apt_repos_desktop:
       - name: vscode
         apt_repo_source: "https://packages.microsoft.com/repos/code"
         key_url: "https://packages.microsoft.com/keys/microsoft.asc"
@@ -56,7 +70,7 @@
         file: "./tasks/core.yaml"
     - name: "Run desktop system initialization"
       ansible.builtin.include_tasks:
-        file: "./tasks/desktop-only.yaml"
+        file: "./tasks/desktop.yaml"
         apply:
-          tags: [desktop-only]
-      tags: [desktop-only]
+          tags: [desktop]
+      tags: [desktop]

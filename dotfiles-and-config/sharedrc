@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+####################################################################################################
+# This file is intended to be sourced by each bash-compatible shell rc file (.bashrc, .zshrc, etc).
+####################################################################################################
+
+### PATH
+for p in \
+  "${HOME}/.local/bin" \
+  "${HOME}/.local/go/bin" \
+  "${HOME}/go/bin" \
+  "${HOME}/.cargo/bin" \
+  "/usr/games" \
+  "/usr/local/games" \
+; do
+  if [[ ! "${PATH}" =~ ${p} ]]; then
+    export PATH="${p}:${PATH}"
+  fi
+done
+
+### Aliases
+alias cfn='aws cloudformation '
+alias dsp='docker system prune'
+alias dspv='docker system prune --volumes'
+alias k='kubectl '
+alias tclsh='rlwrap tclsh '
+alias tf='terraform '
+# System update
+# Name chosen because this matches one of the oh-my-zsh aliases for all this
+alias agud='sudo apt update && sudo apt dist-upgrade && sudo apt autoremove -y && sudo apt autoclean -y'
+# Git aliases
+alias gst='git status'
+alias gco='git checkout '
+alias gl='git pull'
+alias gc='git commit '
+alias gp='git push'
+
+### Vars
+export AWS_DEFAULT_REGION='us-east-2'
+if [[ -f "${HOME}/.aws_var_overrides" ]]; then
+  # shellcheck disable=SC1091
+  source "${HOME}/.aws_var_overrides"
+fi
+
+export DOCKER_BUILDKIT=1
+
+export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
+# export VAGRANT_EXPERIMENTAL="disks"
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+
+# VSCode is so fucking stupid, and needs this undocumented var for actually opening a Remote
+export WSL_DISTRO_NAME='debian'
+
+### Functions
+git-branch-cleanup() {
+  git fetch --prune 2>&1 \
+  | awk '{ gsub(/origin\//, "", $5) ; print $5 }' \
+  | xargs -I{} git branch -D || true
+}
+
+# Quick-and-dirty but handy SQLite func for operating directly on CSVs
+csvql() {
+  sqlite3 \
+    ':memory:' \
+    -cmd '.mode csv' \
+    -cmd ".import $1 data" \
+    -cmd '.mode column' \
+    "${2}"
+}

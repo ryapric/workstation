@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     ws.vm.synced_folder ".", "/vagrant", disabled: true
     ws.vm.provision "file", source: "./Makefile", destination: "/tmp/workstation/Makefile"
     ws.vm.provision "file", source: "./system", destination: "/tmp/workstation/system"
-    ws.vm.provision "file", source: "./dotfiles", destination: "/tmp/workstation/dotfiles"
+    ws.vm.provision "file", source: "./dotfiles-and-config", destination: "/tmp/workstation/dotfiles-and-config"
     ws.vm.provision "shell",
       inline: <<-SCRIPT
         # Vagrant boot needs some redundant love before the main script, since

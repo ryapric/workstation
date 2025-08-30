@@ -8,15 +8,18 @@ main_playbook := $(ansible_dir)/main.yaml
 
 export ANSIBLE_CONFIG=$(ansible_cfg)
 
-system-config:
-	ansible-lint $(main_playbook)
-	ansible-playbook --skip-tags 'desktop-only' $(main_playbook)
+system-config: ansible-lint
+	ansible-playbook --skip-tags 'desktop' $(main_playbook)
 
-system-config-desktop-only:
-	ansible-playbook --tags 'desktop-only' $(main_playbook)
+system-config-desktop: ansible-lint
+	ansible-playbook --tags 'desktop' $(main_playbook)
 
-dotfiles-setup:
-	@make -C ./dotfiles -s setup
+ansible-lint:
+	ansible-lint ./system/ansible/*.yaml
+	ansible-lint ./system/ansible/tasks/*.yaml
+
+dotfiles:
+	@make -C ./dotfiles-and-config -s setup
 
 # Runs tests in Vagrant. In case of failures during iteration, this splits up
 # the provisioning call into its own line so this target can be called multiple

@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# Shared shell rc file
+source "${HOME}/.sharedrc"
+
 ### ZSH stuff
 export ZSH="${HOME}/.oh-my-zsh"
 ZSH_THEME="gnzh"
@@ -13,5 +16,5 @@ plugins=(
 
 source "${ZSH}/oh-my-zsh.sh"
 
-# Shared shell rc file
-source "${HOME}/.sharedrc"
+# shellcheck disable=SC1091
+source "${HOME}/.sharedrc-final"

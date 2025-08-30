@@ -18,9 +18,13 @@
       - "bluez"
       - "dolphin-emu-data"
       - "dolphin-emu"
+      - "firefox"
       - "mupen64plus-*"
+      - "obs-studio"
       - "steam-devices"
       - "steam-installer"
+      - "torbrowser-launcher"
+      - "virt-manager"
       - "xfce4"
       - "xfce4-goodies"
     update_cache: true
@@ -30,24 +34,24 @@
 
 - name: "Add Debian repos"
   become: true
+  loop: "{{ apt_repos_desktop }}"
   ansible.builtin.deb822_repository:
     name: "{{ item.name }}"
     types: "deb"
-    uris: "{{ item.apt_repo_source }}"
+    uris: "{{ item.uri }}"
     suites: "{{ item.suite }}"
     components: "{{ item.component }}"
-    signed_by: "{{ item.key_url }}"
-  loop: "{{ apt_repos_desktop_only }}"
+    signed_by: "{{ item.key_uri }}"
 
 - name: "Install packages from new repos"
   become: true
+  loop: "{{ apt_repos_desktop }}"
   ansible.builtin.apt:
     pkg: "{{ item.packages }}"
     update_cache: true
     autoclean: true
     autoremove: true
     clean: true
-  loop: "{{ apt_repos_desktop_only }}"
 
 - name: "Check if RStudio is installed"
   ansible.builtin.stat:

@@ -1,0 +1,32 @@
+---
+- name: "Bump to Debian Sid/Unstable"
+  hosts: "localhost"
+  remote_user: "root"
+
+  tasks:
+    - name: "Remove any previous sources.list files"
+      become: true
+      loop:
+        - "/etc/apt/sources.list"
+        - "/etc/apt/sources.list.d/debian.sources"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: "absent"
+
+    - name: "Add Debian Sid sources"
+      become: true
+      ansible.builtin.deb822_repository:
+        name: "debian"
+        types: ["deb", "deb-src"]
+        uris: "https://deb.debian.org/debian/"
+        suites: "unstable"
+        components: "main contrib non-free non-free-firmware"
+        signed_by: "/usr/share/keyrings/debian-archive-keyring.gpg"
+
+    - name: "Upgrade system"
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: "full"
+        autoclean: true
+        autoremove: true

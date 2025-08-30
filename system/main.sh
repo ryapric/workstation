@@ -12,5 +12,5 @@ sudo -u ryan make -C "${src}" system-config
 # TODO: only runs desktop init during tests, but need a way to do this more
 # dynamically as well
 if [[ -n "${TESTING}" ]] ; then
-  sudo -u ryan make -C "${src}" system-config-desktop-only
+  sudo -u ryan make -C "${src}" system-config-desktop
 fi
