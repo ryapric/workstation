@@ -16,5 +16,8 @@ plugins=(
 
 source "${ZSH}/oh-my-zsh.sh"
 
+### mise-en-place
+eval "$(mise activate zsh)"
+
 # shellcheck disable=SC1091
 source "${HOME}/.sharedrc-final"

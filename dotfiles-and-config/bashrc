@@ -22,5 +22,8 @@ bind 'set show-all-if-ambiguous on'
 bind 'TAB:menu-complete'
 bind '"\e[Z":menu-complete-backward'
 
+### mise-en-place
+eval "$(mise activate bash)"
+
 # shellcheck disable=SC1091
 source "${HOME}/.sharedrc-final"

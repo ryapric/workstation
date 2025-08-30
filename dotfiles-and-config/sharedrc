@@ -67,3 +67,24 @@ csvql() {
     -cmd '.mode column' \
     "${2}"
 }
+
+### Install mise if it isn't already
+if ! command -v mise > /dev/null ; then
+  printf 'NOTE: mise not found on PATH, will install\n' >&2
+
+  mise_version='v2025.8.21'
+
+  # Defaults based on the machines I usually run
+  os='linux'
+  arch='x64'
+
+  if [[ "$(uname -s)" == "Darwin" ]] ; then
+    os='macos'
+  fi
+  if [[ "$(uname -m)" == "arm64" ]] ; then
+    arch='arm64'
+  fi
+
+  curl -fsSL -o "${HOME}/.local/bin/mise" "https://github.com/jdx/mise/releases/download/${mise_version}/mise-${mise_version}-${os}-${arch}"
+  chmod +x "${HOME}/.local/bin/mise"
+fi

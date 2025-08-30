@@ -1,23 +1,31 @@
 SHELL := /usr/bin/env bash
 
+RUN = uv run
+
 .PHONY: %
+
+default: ansible-init system-config system-config-desktop
 
 ansible_dir := ./system/ansible
 ansible_cfg := $(ansible_dir)/ansible.cfg
 main_playbook := $(ansible_dir)/main.yaml
 
-export ANSIBLE_CONFIG=$(ansible_cfg)
+export ANSIBLE_CONFIG = $(ansible_cfg)
+
+ansible-init:
+	$(RUN) ansible-galaxy install -r ./system/ansible/requirements.yaml
 
 system-config: ansible-lint
-	ansible-playbook --skip-tags 'desktop' $(main_playbook)
+	$(RUN) ansible-playbook --skip-tags 'desktop' $(main_playbook)
 
 system-config-desktop: ansible-lint
-	ansible-playbook --tags 'desktop' $(main_playbook)
+	$(RUN) ansible-playbook --tags 'desktop' $(main_playbook)
 
 ansible-lint:
-	ansible-lint ./system/ansible/*.yaml
-	ansible-lint ./system/ansible/tasks/*.yaml
+	$(RUN) ansible-lint ./system/ansible/*.yaml
+	$(RUN) ansible-lint ./system/ansible/tasks/*.yaml
 
+# NOTE: this is ran in the Ansible Playbook as well
 dotfiles:
 	@make -C ./dotfiles-and-config -s setup
 

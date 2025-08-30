@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
         echo -e 'vagrant\nvagrant' | passwd ryan
         printf 'ryan ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/ryan
 
-        TESTING=true bash /tmp/workstation/system/main.sh
+        sudo -u ryan make -C /tmp/workstation default
       SCRIPT
   end
 
