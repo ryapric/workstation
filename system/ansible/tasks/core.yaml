@@ -1,3 +1,8 @@
+---
+################################################################################
+# System packages
+################################################################################
+
 # We do this to make earlier APT updates faster until we need those repos
 - name: "Remove custom APT sources files"
   become: true
@@ -90,6 +95,9 @@
     autoremove: true
     clean: true
 
+################################################################################
+# User setup
+################################################################################
 - name: "Add user"
   become: true
   ansible.builtin.user:
@@ -111,38 +119,9 @@
     dest: "/etc/sudoers.d/{{ user }}"
     mode: "0600"
 
-- name: "Install uv for Python"
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.shell:
-    cmd: |
-      bash -c "$(curl -fsSL https://astral.sh/uv/install.sh)"
-    creates: "/home/{{ user }}/.local/bin/uv"
-
-- name: "Install Oh My Zsh"
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.shell:
-    cmd: 'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-    creates: "/home/{{ user }}/.oh-my-zsh"
-
-- name: "Install nanorc"
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: "https://github.com/scopatz/nanorc.git"
-    dest: "/home/{{ user }}/.nano"
-    update: true # noqa: latest
-
-- name: "Configure nanorc"
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.copy:
-    dest: "/home/{{ user }}/.nanorc"
-    content: |
-      include /home/{{ user }}/.nano/*.nanorc
-    mode: "0644"
-
+################################################################################
+# Dotfiles/other config setup
+################################################################################
 - name: "Run dotfiles setup"
   become: true
   become_user: "{{ user }}"

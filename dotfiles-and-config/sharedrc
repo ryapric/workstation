@@ -37,13 +37,7 @@ alias gp='git push'
 
 ### Vars
 export AWS_DEFAULT_REGION='us-east-2'
-if [[ -f "${HOME}/.aws_var_overrides" ]]; then
-  # shellcheck disable=SC1091
-  source "${HOME}/.aws_var_overrides"
-fi
-
 export DOCKER_BUILDKIT=1
-
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 # export VAGRANT_EXPERIMENTAL="disks"
 export VAGRANT_DEFAULT_PROVIDER=libvirt
@@ -87,4 +81,11 @@ if ! command -v mise > /dev/null ; then
 
   curl -fsSL -o "${HOME}/.local/bin/mise" "https://github.com/jdx/mise/releases/download/${mise_version}/mise-${mise_version}-${os}-${arch}"
   chmod +x "${HOME}/.local/bin/mise"
+fi
+
+### Overrides that may exist on the specific machine, these should obviously be run last
+printf 'NOTE: any shell overrides should go into "~/.overridesrc"\n'
+if [[ -f "${HOME}/.overridesrc" ]] ; then
+  # shellcheck disable=SC1091
+  source "${HOME}/.overridesrc"
 fi

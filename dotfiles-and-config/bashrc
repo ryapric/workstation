@@ -5,11 +5,6 @@ source "${HOME}/.sharedrc"
 
 shopt -s globstar
 
-if [[ -f "${HOME}/.git-prompt.sh" ]] ; then
-  # shellcheck disable=1091
-  source "${HOME}/.git-prompt.sh"
-fi
-
 ### Shell prompt
 # Built with help from: https://bash-prompt-generator.org/
 export GIT_PS1_SHOWDIRTYSTATE=true
@@ -18,6 +13,15 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true
 export GIT_PS1_STATESEPARATOR=''
 PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)")'
 PS1='\[\e[92m\]\u@\h \[\e[96m\]\w\[\e[93m\]${PS1_CMD1}\[\e[0m\] [\[\e[91m\]$?\[\e[0m\]]\n-> '
+
+if [[ ! -f "${HOME}/.git-prompt.sh" ]]; then
+  curl -fsSL \
+    -o "${HOME}/.git-prompt.sh" \
+    'https://raw.githubusercontent.com/git/git/refs/heads/master/contrib/completion/git-prompt.sh'
+fi
+
+# shellcheck disable=1091
+source "${HOME}/.git-prompt.sh"
 
 ### Completions
 bind 'set show-all-if-ambiguous on'

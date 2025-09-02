@@ -8,8 +8,11 @@
 # Check if running under WSL, and NOT WSL Debian
 if uname -a | grep -q -i -E 'microsoft|wsl' ; then # && ! grep -q 'sid' /etc/*-release ; then
   if [[ -f /usr/lib/binfmt.d/WSLInterop.conf ]]; then
-    printf 'WARNING: the file at /usr/lib/binfmt.d/WSLInterop.conf is there until MS fixes systemd-enabled WSL2 interop -- delete later when no longer needed\n'
-    printf 'Additional details here: https://github.com/microsoft/WSL/issues/8843#issuecomment-1255546484\n'
+  paste -sd ' ' <<-EOF
+WARNING: the file at /usr/lib/binfmt.d/WSLInterop.conf is there until MS fixes systemd-enabled WSL2
+interop -- delete later when no longer needed. Additional details here:
+https://github.com/microsoft/WSL/issues/8843#issuecomment-1255546484
+EOF
   fi
   sudo usermod -aG kvm,libvirt "${USER}" || true
   sudo bash -c '[[ -f /etc/resolv.conf ]] || sudo printf "nameserver 8.8.8.8\nnameserver 1.1.1.1\n" > /etc/resolv.conf'

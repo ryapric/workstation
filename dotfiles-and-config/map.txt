@@ -3,6 +3,7 @@
 
 bashrc          ${HOME}/.bashrc          link
 config/mise     ${HOME}/.config/         link
+p10k.zsh        ${HOME}/.p10k.zsh        link
 sharedrc        ${HOME}/.sharedrc        link
 sharedrc-final  ${HOME}/.sharedrc-final  link
 tmux.conf       ${HOME}/.tmux.conf       link

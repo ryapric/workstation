@@ -1,10 +1,10 @@
 ---
 - name: "Initialization"
-  hosts: "localhost"
-  remote_user: "root"
+  hosts: "all,localhost"
 
   vars:
-    user: "ryan"
+    user: "{{ lookup('ansible.builtin.env', 'USER', default = 'ryan') }}"
+    homedir: "{{ lookup('ansible.builtin.env', 'HOME') }}"
     # Need a few Debian vars instead of using Facts, because we're running Debian Unstable and that
     # can't always be interpolated into repo sources
     debian_release_number: "13"
@@ -65,12 +65,30 @@
     - name: "Upgrade to Debian Sid/Unstable"
       ansible.builtin.include_tasks:
         file: "./tasks/debian-unstable.yaml"
-    - name: "Run core system initialization"
+        apply:
+          tags: [debian-unstable]
+      tags: [debian-unstable]
+    - name: "Run for core system"
       ansible.builtin.include_tasks:
         file: "./tasks/core.yaml"
-    - name: "Run desktop system initialization"
+        apply:
+          tags: [core]
+      tags: [core]
+    - name: "Run for desktop system"
       ansible.builtin.include_tasks:
         file: "./tasks/desktop.yaml"
         apply:
           tags: [desktop]
       tags: [desktop]
+    - name: "Run shell configuration"
+      ansible.builtin.include_tasks:
+        file: "./tasks/shell-extras.yaml"
+        apply:
+          tags: [shell-extras]
+      tags: [shell-extras]
+    # - name: "Run for home server"
+    #   ansible.builtin.include_tasks:
+    #     file: "./tasks/desktop.yaml"
+    #     apply:
+    #       tags: [home-server]
+    #   tags: [home-server]

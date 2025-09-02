@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 
-# Shared shell rc file
+### Shared shell rc file
 source "${HOME}/.sharedrc"
 
-### ZSH stuff
+### Non-theme ZSH stuff
 HISTFILE=~/.zsh_history
 HISTSIZE=5000
 SAVEHIST=5000
@@ -15,10 +15,24 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || true
+
+source "${HOME}/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+source "${HOME}/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+# Can tweak autocomplete keybindings, but need to be set *after* loading the plugin
+bindkey '^I' menu-select
+bindkey "${terminfo[kcbt]}" menu-select
+
+### Powerlevel10k themeing
+# The theme sources
+source "${HOME}/.powerlevel10k/powerlevel10k.zsh-theme"
+# Your own p10k config file to use those theme sources
+source "${HOME}/.p10k.zsh"
 
 ### mise-en-place
 eval "$(mise activate zsh)"
 
-# shellcheck disable=SC1091
+# Per their README, this must be sourced close-to-last in the file
+source "${HOME}/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
 source "${HOME}/.sharedrc-final"
