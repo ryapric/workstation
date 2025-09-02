@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Try to make grep calls more portable between Linux and macOS, ugh
+# Try to make some tools more portable between Linux and macOS, ugh. These will depend on
+# brew-installing coreutils though, to be clear.
 gnu_grep='grep'
+gnu_stat='stat'
 if [[ "$(uname -s)" == "Darwin" ]] ; then
   gnu_grep='ggrep'
+  gnu_stat='gstat'
 fi
 
 # Using envsubst in a single call seems to only use the last line in the file, so envsubst the whole
@@ -22,7 +25,7 @@ while read -r line; do
   mkdir -p "$(dirname "${tgt}")"
 
   dotfile_user="${USER}"
-  if [[ $(stat -c '%U' "${tgt}") == 'root' ]] || [[ $(stat -c '%U' "$(dirname "${tgt}")") == 'root' ]]; then
+  if [[ "$("${gnu_stat}" -c '%U' "${tgt}")" == 'root' ]] || [[ "$("${gnu_stat}" -c '%U' "$(dirname "${tgt}")")" == 'root' ]]; then
     dotfile_user='root'
   fi
 
