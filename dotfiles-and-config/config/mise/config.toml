@@ -1,5 +1,5 @@
 [settings]
-idiomatic_version_file_enable_tools = ["python"]
+idiomatic_version_file_enable_tools = []
 
 [tools]
 go = "1.25.0"
