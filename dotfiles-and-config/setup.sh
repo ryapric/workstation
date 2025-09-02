@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Try to make grep calls more portable between Linux and macOS, ugh
-gnu_grep='grep '
+gnu_grep='grep'
 if [[ "$(uname -s)" == "Darwin" ]] ; then
-  gnu_grep='ggrep '
+  gnu_grep='ggrep'
 fi
 
 # Using envsubst in a single call seems to only use the last line in the file, so envsubst the whole
