@@ -3,6 +3,8 @@
 # shellcheck disable=SC1091
 source "${HOME}/.sharedrc"
 
+shopt -s globstar
+
 if [[ -f "${HOME}/.git-prompt.sh" ]] ; then
   # shellcheck disable=1091
   source "${HOME}/.git-prompt.sh"
