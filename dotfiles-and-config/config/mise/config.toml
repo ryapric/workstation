@@ -6,17 +6,19 @@ experimental = true
 uvx = true
 
 [env]
+CARGO_NET_GIT_FETCH_WITH_CLI = true
 # For R/rig, used below. We need to set this so rig won't fail to detect the version on Debian Sid.
 # Note that this source value is exported from ~/.sharedrc, to also allow for macOS hosts.
-RIG_PLATFORM = "{{ env.RIG_PLATFORM_REAL }}"
+RIG_PLATFORM = "{{env.RIG_PLATFORM_REAL}}"
 
 [tools]
 go = "1.25.0"
 python = "prefix:3"
 uv = "0.8.14"
+rust = "1.89.0"
 
 # R isn't available directly from a mise backend, so we have to install an R version manager first
 # (rig), and then have that install R for us.
-[tools."github:r-lib/rig"]
-version = "0.7.1"
+[tools."cargo:https://github.com/r-lib/rig"]
+version = "tag:v0.7.1"
 postinstall = "rig add 4.5.1"
