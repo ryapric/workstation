@@ -1,13 +1,16 @@
-# col1 is repo file, col2 is target path, col3 is how to add it
-# Don't quote vars, it'll break the while-loop read
+# NOTE: Don't quote vars in this file, it'll break the while-loop read
 
-bashrc          ${HOME}/.bashrc          link
-config/mise     ${HOME}/.config/         link
-p10k.zsh        ${HOME}/.p10k.zsh        link
-sharedrc        ${HOME}/.sharedrc        link
-sharedrc-final  ${HOME}/.sharedrc-final  link
-tmux.conf       ${HOME}/.tmux.conf       link
-zshrc           ${HOME}/.zshrc           link
+#-----------------------------------------------------
+# Source          Target                         Action
+#-----------------------------------------------------
+bashrc            ${HOME}/.bashrc                link
+config/mise       ${HOME}/.config/               link
+p10k.zsh          ${HOME}/.zsh/p10k.zsh          link
+sharedrc          ${HOME}/.sharedrc              link
+sharedrc-final    ${HOME}/.sharedrc-final        link
+tmux.conf         ${HOME}/.tmux.conf             link
+zsh_plugins.conf  ${HOME}/.zsh/zsh_plugins.conf  link
+zshrc             ${HOME}/.zshrc                 link
 
 # htop's config is highly variable between version, so we can just copy it vs. linking so it doesn't
 # clutter up the VCS history

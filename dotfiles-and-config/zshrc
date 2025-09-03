@@ -3,6 +3,8 @@
 ### Shared shell rc file
 source "${HOME}/.sharedrc"
 
+export zsh_cfg_dir="${HOME}/.zsh"
+
 ### Non-theme ZSH stuff
 HISTFILE=~/.zsh_history
 HISTSIZE=5000
@@ -16,14 +18,16 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-# source "${HOME}/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "${zsh_cfg_dir}/antidote/antidote.zsh"
+antidote load "${zsh_cfg_dir}/zsh_plugins.conf"
 
-source "${HOME}/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
-# Can tweak autocomplete keybindings, but need to be set *after* loading the plugin
+### Keybindings, which need to be modified after loading plugins
+
+# For plugin marlonrichert/zsh-autocomplete
 bindkey '^I' menu-select
 bindkey "${terminfo[kcbt]}" menu-select
 
-# For some reason, bare zsh on Linux doesn't have word-jumping, so set those keybinds here
+# For some reason, bare zsh on Linux doesn't have word-jumping bound, so set those keybinds here
 if [[ "$(uname -s)" == "Linux" ]] ; then
   bindkey "${terminfo[kLFT5]}" backward-word
   bindkey "${terminfo[kRIT5]}" forward-word
@@ -31,14 +35,11 @@ fi
 
 ### Powerlevel10k themeing
 # The theme sources
-source "${HOME}/.powerlevel10k/powerlevel10k.zsh-theme"
+source "${zsh_cfg_dir}/powerlevel10k/powerlevel10k.zsh-theme"
 # Your own p10k config file to use those theme sources
-source "${HOME}/.p10k.zsh"
+source "${zsh_cfg_dir}/p10k.zsh"
 
 ### mise-en-place
 eval "$(mise activate zsh)"
-
-# Per their README, this must be sourced close-to-last in the file
-source "${HOME}/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 source "${HOME}/.sharedrc-final"

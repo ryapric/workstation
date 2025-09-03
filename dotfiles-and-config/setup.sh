@@ -16,7 +16,9 @@ fi
 
 while read -r line; do
   # Skip comments and blank/malformed lines
-  if "${gnu_grep}" -qE '^#' <(echo "${line}") || "${gnu_grep}" -qE '^\s+?$' <(echo "${line}"); then continue; fi
+  if "${gnu_grep}" -qE '^#' <(echo "${line}") || "${gnu_grep}" -qE '^\s+?$' <(echo "${line}") ; then
+    continue
+  fi
 
   src=$(realpath "$(awk '{ print $1 }' <<< "${line}")")
   tgt=$(awk '{ print $2 }' <<< "${line}")
@@ -34,8 +36,14 @@ while read -r line; do
     sudo -u "${dotfile_user}" ln -fs "${src}" "${tgt}"
     printf 'Symlinked "%s" to "%s"\n' "${src}" "${tgt}"
   elif [[ "${action}" == 'copy' ]]; then
-    sudo -u "${dotfile_user}" cp -r "${src}" "${tgt}"
-    printf 'Copied "%s" to "%s"\n' "${src}" "${tgt}"
+    # For 'copy' actions, we don't want to replace anything that was post-configured for the actual
+    # host system (like xfce4 display config), so skip it
+    if [[ -f "${tgt}" || -d "${tgt}" ]] ; then
+      printf '!! Copiable target "%s" exists, refusing to copy\n' "${tgt}"
+    else
+      sudo -u "${dotfile_user}" cp -r "${src}" "${tgt}"
+      printf 'Copied "%s" to "%s"\n' "${src}" "${tgt}"
+    fi
   fi
 
   if [[ "${tgt}" =~ ${HOME} ]]; then

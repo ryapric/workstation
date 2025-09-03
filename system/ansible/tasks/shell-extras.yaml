@@ -9,30 +9,12 @@
     mode: "0755"
     state: "directory"
 
-# TODO: figure out if I like having this, since I don't know the keybinds to accept a
-# non-conflicting suggestion
-# - name: "Install zsh-autosuggestions"
-#   become: true
-#   become_user: "{{ user }}"
-#   ansible.builtin.git:
-#     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
-#     dest: "{{ homedir }}/.zsh/zsh-autosuggestions"
-#     update: true # noqa: latest
-
-- name: "Install zsh-autocomplete"
+- name: "Install antidote for managing zsh plugins"
   become: true
   become_user: "{{ user }}"
   ansible.builtin.git:
-    repo: "https://github.com/marlonrichert/zsh-autocomplete.git"
-    dest: "{{ homedir }}/.zsh/zsh-autocomplete"
-    update: true # noqa: latest
-
-- name: "Install zsh-syntax-highlighting"
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-    dest: "{{ homedir }}/.zsh/zsh-syntax-highlighting"
+    repo: "https://github.com/mattmc3/antidote.git"
+    dest: "{{ homedir }}/.zsh/antidote"
     update: true # noqa: latest
 
 # - name: "Install powerlevel10k-recommended fonts"
@@ -52,7 +34,7 @@
   become_user: "{{ user }}"
   ansible.builtin.git:
     repo: "https://github.com/romkatv/powerlevel10k.git"
-    dest: "{{ homedir }}/.powerlevel10k"
+    dest: "{{ homedir }}/.zsh/powerlevel10k"
     update: true # noqa: latest
 
 - name: "Install nanorc"
