@@ -23,9 +23,11 @@ source "${HOME}/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
 bindkey '^I' menu-select
 bindkey "${terminfo[kcbt]}" menu-select
 
-# For some reason, bare zsh doesn't have word-jumping, so set those keybinds here
-bindkey "${terminfo[kLFT5]}" backward-word
-bindkey "${terminfo[kRIT5]}" forward-word
+# For some reason, bare zsh on Linux doesn't have word-jumping, so set those keybinds here
+if [[ "$(uname -s)" == "Linux" ]] ; then
+  bindkey "${terminfo[kLFT5]}" backward-word
+  bindkey "${terminfo[kRIT5]}" forward-word
+fi
 
 ### Powerlevel10k themeing
 # The theme sources
