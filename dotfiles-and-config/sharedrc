@@ -39,6 +39,15 @@ alias gp='git push'
 export AWS_DEFAULT_REGION='us-east-2'
 export DOCKER_BUILDKIT=1
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
+
+# This is used for rig, the R version manager. mise will set the real var key (RIG_ENV) at runtime,
+# but it needs host info to do that.
+RIG_PLATFORM_REAL='debian-12'
+if [[ "$(uname -s)" == "Darwin" ]] ; then
+  RIG_PLATFORM_REAL='macos'
+fi
+export RIG_PLATFORM_REAL
+
 # export VAGRANT_EXPERIMENTAL="disks"
 export VAGRANT_DEFAULT_PROVIDER=libvirt
 

@@ -9,13 +9,15 @@
     mode: "0755"
     state: "directory"
 
-- name: "Install zsh-autosuggestions"
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
-    dest: "{{ homedir }}/.zsh/zsh-autosuggestions"
-    update: true # noqa: latest
+# TODO: figure out if I like having this, since I don't know the keybinds to accept a
+# non-conflicting suggestion
+# - name: "Install zsh-autosuggestions"
+#   become: true
+#   become_user: "{{ user }}"
+#   ansible.builtin.git:
+#     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+#     dest: "{{ homedir }}/.zsh/zsh-autosuggestions"
+#     update: true # noqa: latest
 
 - name: "Install zsh-autocomplete"
   become: true

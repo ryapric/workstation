@@ -16,12 +16,16 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-source "${HOME}/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+# source "${HOME}/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 source "${HOME}/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
 # Can tweak autocomplete keybindings, but need to be set *after* loading the plugin
 bindkey '^I' menu-select
 bindkey "${terminfo[kcbt]}" menu-select
+
+# For some reason, bare zsh doesn't have word-jumping, so set those keybinds here
+bindkey "${terminfo[kLFT5]}" backward-word
+bindkey "${terminfo[kRIT5]}" forward-word
 
 ### Powerlevel10k themeing
 # The theme sources
