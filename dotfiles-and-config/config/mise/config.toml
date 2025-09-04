@@ -12,10 +12,12 @@ CARGO_NET_GIT_FETCH_WITH_CLI = true
 RIG_PLATFORM = "{{env.RIG_PLATFORM_REAL}}"
 
 [tools]
+buf = "prefix:1"
 go = "1.25.0"
+protobuf = "prefix:32"
 python = "prefix:3"
-uv = "0.8.14"
 rust = "1.89.0"
+uv = "0.8.14"
 
 # R isn't available directly from a mise backend, so we have to install an R version manager first
 # (rig), and then have that install R for us.
