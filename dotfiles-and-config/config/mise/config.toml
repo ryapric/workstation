@@ -17,6 +17,7 @@ go = "1.25.0"
 protobuf = "prefix:32"
 python = "prefix:3"
 rust = "1.89.0"
+terraform = "prefix:1.13"
 uv = "0.8.14"
 
 # R isn't available directly from a mise backend, so we have to install an R version manager first
