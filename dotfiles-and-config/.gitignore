@@ -1,0 +1,10 @@
+# To keep portable configs portable & linkable, the xfce4 configs need to hide some host-specific stuff
+config/xfce4/desktop/
+config/xfce4/panel/
+config/xfce4/xfce4-screenshooter
+config/xfce4/terminal/
+config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-editor.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-manager.xml

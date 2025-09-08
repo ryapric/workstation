@@ -23,12 +23,16 @@ antidote load "${zsh_cfg_dir}/zsh_plugins.conf"
 
 ### Keybindings, which need to be modified after loading plugins
 
-# For plugin marlonrichert/zsh-autocomplete
-bindkey '^I' menu-select
-bindkey "${terminfo[kcbt]}" menu-select
+#### zsh-history-substring-search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+if is-linux ; then
+  bindkey "${terminfo[kcuu1]}" history-substring-search-up
+  bindkey "${terminfo[kcud1]}" history-substring-search-down
+fi
 
 # For some reason, bare zsh on Linux doesn't have word-jumping bound, so set those keybinds here
-if [[ "$(uname -s)" == "Linux" ]] ; then
+if is-linux ; then
   bindkey "${terminfo[kLFT5]}" backward-word
   bindkey "${terminfo[kRIT5]}" forward-word
 fi

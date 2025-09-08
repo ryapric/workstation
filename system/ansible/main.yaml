@@ -10,6 +10,13 @@
     debian_release_number: "13"
     debian_release_alias: "trixie"
     apt_repos:
+      - name: "mise"
+        uri: "https://mise.jdx.dev/deb"
+        key_uri: "https://mise.jdx.dev/gpg-key.pub"
+        suite: "stable"
+        component: "main"
+        packages:
+          - "mise"
       - name: "docker"
         uri: "https://download.docker.com/linux/debian"
         key_uri: "https://download.docker.com/linux/debian/gpg"
@@ -20,38 +27,15 @@
           - "docker-ce-cli"
           - "containerd.io"
           - "docker-compose-plugin"
-      - name: "kubernetes"
-        uri: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/"
-        key_uri: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key"
-        suite: "/" # yes, just a slash
-        component: "" # yes, nothing
-        packages:
-          - "kubectl"
+      # TODO: let mise handle the Vagrant install, once Vagrant is released as a Go binary in v3.0
       - name: "hashicorp"
         uri: "https://apt.releases.hashicorp.com"
         key_uri: "https://apt.releases.hashicorp.com/gpg"
         suite: "{{ debian_release_alias }}"
         component: "main"
         packages:
-          - "packer"
-          - "terraform"
           - "vagrant"
           - "vagrant-libvirt"
-          - "vault"
-      - name: "github-cli"
-        uri: "https://cli.github.com/packages"
-        key_uri: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
-        suite: "stable"
-        component: "main"
-        packages:
-          - "gh"
-      - name: "mise"
-        uri: "https://mise.jdx.dev/deb"
-        key_uri: "https://mise.jdx.dev/gpg-key.pub"
-        suite: "stable"
-        component: "main"
-        packages:
-          - "mise"
     apt_repos_desktop:
       - name: vscode
         uri: "https://packages.microsoft.com/repos/code"

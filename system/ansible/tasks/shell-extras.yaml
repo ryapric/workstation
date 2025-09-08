@@ -17,17 +17,17 @@
     dest: "{{ homedir }}/.zsh/antidote"
     update: true # noqa: latest
 
-# - name: "Install powerlevel10k-recommended fonts"
-#   become: true
-#   become_user: "{{ user }}"
-#   loop:
-#     - "MesloLGS NF Regular.ttf"
-#     - "MesloLGS NF Bold.ttf"
-#     - "MesloLGS NF Italic.ttf"
-#     - "MesloLGS NF Bold Italic.ttf"
-#   ansible.builtin.get_url:
-#     url: "https://github.com/romkatv/powerlevel10k-media/raw/master/{{ item | regex_replace(' ', '%20') }}"
-#     dest: "{{ homedir }}/.local/share/fonts/{{ item }}"
+- name: "Install powerlevel10k-recommended fonts"
+  become: true
+  become_user: "{{ user }}"
+  loop:
+    - "MesloLGS NF Regular.ttf"
+    - "MesloLGS NF Bold.ttf"
+    - "MesloLGS NF Italic.ttf"
+    - "MesloLGS NF Bold Italic.ttf"
+  ansible.builtin.get_url:
+    url: "https://github.com/romkatv/powerlevel10k-media/raw/master/{{ item | regex_replace(' ', '%20') }}"
+    dest: "{{ homedir }}/.local/share/fonts/{{ item }}"
 
 - name: "Install powerlevel10k zsh theme"
   become: true

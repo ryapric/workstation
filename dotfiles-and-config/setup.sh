@@ -4,15 +4,17 @@ set -euo pipefail
 # Try to make some tools more portable between Linux and macOS, ugh. These will depend on
 # brew-installing coreutils though, to be clear.
 gnu_grep='grep'
+gnu_ln='ln'
 gnu_stat='stat'
 if [[ "$(uname -s)" == "Darwin" ]] ; then
   gnu_grep='ggrep'
+  gnu_ln='gln'
   gnu_stat='gstat'
 fi
 
 # Using envsubst in a single call seems to only use the last line in the file, so envsubst the whole
 # thing to a separate file first
-<map.txt envsubst > /tmp/map.txt
+<map.conf envsubst > /tmp/map.conf
 
 while read -r line; do
   # Skip comments and blank/malformed lines
@@ -33,7 +35,7 @@ while read -r line; do
 
   # Default to symlinking if action is empty
   if [[ -z "${action}" || "${action}" == 'link' ]]; then
-    sudo -u "${dotfile_user}" ln -fs "${src}" "${tgt}"
+    sudo -u "${dotfile_user}" "${gnu_ln}" -Tfs "${src}" "${tgt}"
     printf 'Symlinked "%s" to "%s"\n' "${src}" "${tgt}"
   elif [[ "${action}" == 'copy' ]]; then
     # For 'copy' actions, we don't want to replace anything that was post-configured for the actual
@@ -51,4 +53,4 @@ while read -r line; do
     sudo chown -R "${USER}" "${tgt}"
   fi
 
-done < /tmp/map.txt
+done < /tmp/map.conf

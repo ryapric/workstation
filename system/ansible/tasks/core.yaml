@@ -28,12 +28,14 @@
   ansible.builtin.apt:
     pkg:
       - "apt-transport-https"
+      - "aptitude"
       - "bash-completion"
       - "bats"
       - "blueman"
       - "bluez"
       - "bridge-utils"
-      - "build-essential"
+      # TODO: uncomment when post-Trixie Debian Unstable lets me install this again
+      # - "build-essential"
       - "ca-certificates"
       - "cloc"
       - "curl"

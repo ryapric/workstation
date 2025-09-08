@@ -6,27 +6,20 @@ experimental = true
 uvx = true
 
 [env]
-# Allows cargo to skip any Git auth configs that it tries to set on its own, and just what the host
-# has configured
+# Allows tools installed via the cargo backend to skip any Git auth configs that it tries to set on
+# its own, and just what the host has configured
 CARGO_NET_GIT_FETCH_WITH_CLI = true
-# If we don't change the GOBIN, then mise will put `go install`ed tools into the GOROOT -- which
-# gets wiped whenever we upgrade the Go version.
-GOBIN = "{{env.HOME}}/.local/bin"
-# For R/rig, used below. We need to set this so rig won't fail to detect the version on Debian Sid.
-# Note that this input value is sourced from ~/.sharedrc, to also allow for macOS hosts.
-RIG_PLATFORM = "{{env.RIG_PLATFORM_REAL}}"
 
 [tools]
 buf = "prefix:1"
 go = "prefix:1"
+kubectl = "prefix:1"
+packer = "prefix:1"
 protobuf = "prefix:32"
 python = "prefix:3"
+# TODO: uncomment when post-Trixie Debian Unstable lets me install a C compiler, lmao
+# r = "prefix:4.5"
 rust = "1.89.0"
 terraform = "prefix:1.13"
-uv = "0.8.14"
-
-# R isn't available directly from a mise backend, so we have to install an R version manager first
-# (rig), and then have that install R for us.
-[tools."cargo:https://github.com/r-lib/rig"]
-version = "tag:v0.7.1"
-postinstall = "rig add 4.5.1"
+uv = "prefix:0.8"
+vault = "prefix:1"

@@ -40,14 +40,6 @@ export AWS_DEFAULT_REGION='us-east-2'
 export DOCKER_BUILDKIT=1
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 
-# This is used for rig, the R version manager. mise will set the real var key (RIG_ENV) at runtime,
-# but it needs host info to do that.
-RIG_PLATFORM_REAL='debian-12'
-if [[ "$(uname -s)" == "Darwin" ]] ; then
-  RIG_PLATFORM_REAL='macos'
-fi
-export RIG_PLATFORM_REAL
-
 # export VAGRANT_EXPERIMENTAL="disks"
 export VAGRANT_DEFAULT_PROVIDER=libvirt
 
@@ -55,6 +47,22 @@ export VAGRANT_DEFAULT_PROVIDER=libvirt
 export WSL_DISTRO_NAME='debian'
 
 ### Functions
+is-linux() {
+  if [[ "$(uname -s)" == "Linux" ]] ; then
+    return 0
+  fi
+
+  return 1
+}
+
+is-macos() {
+  if [[ "$(uname -s)" == "Darwin" ]] ; then
+    return 0
+  fi
+
+  return 1
+}
+
 git-branch-cleanup() {
   git fetch --prune 2>&1 \
   | awk '{ gsub(/origin\//, "", $5) ; print $5 }' \
@@ -91,6 +99,10 @@ if ! command -v mise > /dev/null ; then
   curl -fsSL -o "${HOME}/.local/bin/mise" "https://github.com/jdx/mise/releases/download/${mise_version}/mise-${mise_version}-${os}-${arch}"
   chmod +x "${HOME}/.local/bin/mise"
 fi
+
+# mise also has a 'trust' concept for config files, so setting this should let it trust anything
+# under the given director(ies)
+export MISE_TRUSTED_CONFIG_PATHS="${HOME}"
 
 ### Overrides that may exist on the specific machine, these should obviously be run last
 printf 'NOTE: any shell overrides should go into "~/.overridesrc"\n'
