@@ -11,15 +11,17 @@ uvx = true
 CARGO_NET_GIT_FETCH_WITH_CLI = true
 
 [tools]
+bats = "prefix:1"
 buf = "prefix:1"
 go = "prefix:1"
+jq = "prefix:1"
 kubectl = "prefix:1"
 packer = "prefix:1"
 protobuf = "prefix:32"
 python = "prefix:3"
-# TODO: uncomment when post-Trixie Debian Unstable lets me install a C compiler, lmao
-# r = "prefix:4.5"
+ripgrep = "prefix:14"
 rust = "prefix:1"
+shellcheck = "prefix:0"
 terraform = "prefix:1.13"
 uv = "prefix:0.8"
 vault = "prefix:1"

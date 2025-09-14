@@ -51,18 +51,21 @@
         file: "./tasks/debian-unstable.yaml"
         apply:
           tags: [debian-unstable]
+      when: ansible_os_family == "Debian"
       tags: [debian-unstable]
     - name: "Run for core system"
       ansible.builtin.include_tasks:
         file: "./tasks/core.yaml"
         apply:
           tags: [core]
+      when: ansible_os_family == "Debian"
       tags: [core]
     - name: "Run for desktop system"
       ansible.builtin.include_tasks:
         file: "./tasks/desktop.yaml"
         apply:
           tags: [desktop]
+      when: ansible_os_family == "Debian"
       tags: [desktop]
     - name: "Run shell configuration"
       ansible.builtin.include_tasks:
@@ -75,4 +78,5 @@
     #     file: "./tasks/desktop.yaml"
     #     apply:
     #       tags: [home-server]
+    #   when: ansible_os_family == "Debian"
     #   tags: [home-server]

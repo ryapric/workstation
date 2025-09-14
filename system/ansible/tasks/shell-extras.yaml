@@ -28,6 +28,7 @@
   ansible.builtin.get_url:
     url: "https://github.com/romkatv/powerlevel10k-media/raw/master/{{ item | regex_replace(' ', '%20') }}"
     dest: "{{ homedir }}/.local/share/fonts/{{ item }}"
+    mode: "0644"
 
 - name: "Install powerlevel10k zsh theme"
   become: true
