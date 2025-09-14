@@ -1,2 +1,6 @@
 .ansible/
 .vagrant/
+.vscode/
+
+# Any discovered mise override files added on a host to the symlinked directory
+dotfiles-and-config/config/mise/mise.*.toml

@@ -1,15 +1,23 @@
-- name: "Remove old sources.list"
+- name: "Remove old-format sources.list"
   become: true
   ansible.builtin.file:
     path: "/etc/apt/sources.list"
     state: "absent"
 
-- name: "Add Debian Sid sources.list"
+- name: "Add Debian Unstable repo"
   become: true
-  ansible.builtin.copy:
-    content: "deb http://deb.debian.org/debian unstable main contrib non-free non-free-firmware"
-    dest: "/etc/apt/sources.list"
-    mode: "preserve"
+  ansible.builtin.deb822_repository:
+    name: "debian-unstable"
+    types: "deb"
+    uris: "http://deb.debian.org/debian"
+    suites: "unstable"
+    components:
+      - main
+      - contrib
+      - non-free
+      - non-free-firmware
+    signed_by: "/usr/share/keyrings/debian-archive-keyring.gpg"
+    architectures: ["amd64"]
 
 - name: "Upgrade system"
   become: true

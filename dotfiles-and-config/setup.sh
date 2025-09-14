@@ -1,13 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Try to make some tools more portable between Linux and macOS, ugh. These will depend on
+# brew-installing coreutils though, to be clear.
+gnu_grep='grep'
+gnu_ln='ln'
+gnu_stat='stat'
+if [[ "$(uname -s)" == "Darwin" ]] ; then
+  gnu_grep='ggrep'
+  gnu_ln='gln'
+  gnu_stat='gstat'
+fi
+
 # Using envsubst in a single call seems to only use the last line in the file, so envsubst the whole
 # thing to a separate file first
-<map.txt envsubst > /tmp/map.txt
+<map.conf envsubst > /tmp/map.conf
 
 while read -r line; do
   # Skip comments and blank/malformed lines
-  if grep -qE '^#' <(echo "${line}") || grep -qE '^\s+?$' <(echo "${line}"); then continue; fi
+  if "${gnu_grep}" -qE '^#' <(echo "${line}") || "${gnu_grep}" -qE '^\s+?$' <(echo "${line}") ; then
+    continue
+  fi
 
   src=$(realpath "$(awk '{ print $1 }' <<< "${line}")")
   tgt=$(awk '{ print $2 }' <<< "${line}")
@@ -16,29 +29,28 @@ while read -r line; do
   mkdir -p "$(dirname "${tgt}")"
 
   dotfile_user="${USER}"
-  if [[ $(stat -c '%U' "${tgt}") == 'root' ]] || [[ $(stat -c '%U' "$(dirname "${tgt}")") == 'root' ]]; then
+  if [[ "$("${gnu_stat}" -c '%U' "${tgt}")" == 'root' ]] || [[ "$("${gnu_stat}" -c '%U' "$(dirname "${tgt}")")" == 'root' ]]; then
     dotfile_user='root'
   fi
 
   # Default to symlinking if action is empty
   if [[ -z "${action}" || "${action}" == 'link' ]]; then
-    sudo -u "${dotfile_user}" ln -fs "${src}" "${tgt}"
+    sudo -u "${dotfile_user}" "${gnu_ln}" -Tfs "${src}" "${tgt}"
     printf 'Symlinked "%s" to "%s"\n' "${src}" "${tgt}"
   elif [[ "${action}" == 'copy' ]]; then
-    sudo -u "${dotfile_user}" cp -r "${src}" "${tgt}"
-    printf 'Copied "%s" to "%s"\n' "${src}" "${tgt}"
+    # For 'copy' actions, we don't want to replace anything that was post-configured for the actual
+    # host system (like xfce4 display config), so skip it
+    if [[ -f "${tgt}" || -d "${tgt}" ]] ; then
+      printf '!! Copiable target "%s" exists, refusing to copy\n' "${tgt}"
+    else
+      sudo -u "${dotfile_user}" cp -r "${src}" "${tgt}"
+      printf 'Copied "%s" to "%s"\n' "${src}" "${tgt}"
+    fi
   fi
 
   if [[ "${tgt}" =~ ${HOME} ]]; then
     printf 'Fixing user permissions for target "%s"\n' "${tgt}"
-    sudo chown -R "${USER}:${USER}" "${tgt}"
+    sudo chown -R "${USER}" "${tgt}"
   fi
 
-done < /tmp/map.txt
-
-# Add the git-status shell prompt helper to the homedir, since the prompt uses it
-if [[ ! -f "${HOME}/.git-prompt.sh" ]]; then
-  curl -fsSL \
-    -o "${HOME}/.git-prompt.sh" \
-    'https://raw.githubusercontent.com/git/git/refs/heads/master/contrib/completion/git-prompt.sh'
-fi
+done < /tmp/map.conf

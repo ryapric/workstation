@@ -1,14 +1,17 @@
-- name: "Check for i386 architecture enablement for Steam"
-  become: true
-  ansible.builtin.command:
-    cmd: "dpkg --print-foreign-architectures" # noqa: no-changed-when
-  register: foreign_arch
+# TODO: uncomment these in the future if I want them -- enabling i386 carries the risk of Debian
+# Unstable packages for that arch not being updated along with amd64 in a timely fashion, and can
+# prevent installing packages like build-essential
+# - name: "Check for i386 architecture enablement for Steam"
+#   become: true
+#   ansible.builtin.command:
+#     cmd: "dpkg --print-foreign-architectures" # noqa: no-changed-when
+#   register: foreign_arch
 
-- name: "Enable i386 arch if needed"
-  become: true
-  ansible.builtin.command:
-    cmd: "dpkg --add-architecture i386" # noqa: no-changed-when
-  when: '"i386" not in foreign_arch.stdout_lines'
+# - name: "Enable i386 arch if needed"
+#   become: true
+#   ansible.builtin.command:
+#     cmd: "dpkg --add-architecture i386" # noqa: no-changed-when
+#   when: '"i386" not in foreign_arch.stdout_lines'
 
 - name: "Install available packages for desktop-only software"
   become: true
@@ -21,8 +24,9 @@
       - "firefox"
       - "mupen64plus-*"
       - "obs-studio"
-      - "steam-devices"
-      - "steam-installer"
+      # See above comment about i386 arch
+      # - "steam-devices"
+      # - "steam-installer"
       - "torbrowser-launcher"
       - "virt-manager"
       - "xfce4"
@@ -77,7 +81,7 @@
   become: true
   become_user: "{{ user }}"
   ansible.builtin.file:
-    path: "/home/{{ user }}/GameROMs"
+    path: "{{ homedir }}/GameROMs"
     mode: "0755"
     state: "directory"
 

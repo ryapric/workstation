@@ -1,0 +1,56 @@
+- name: "Ensure various directories exist"
+  become: true
+  become_user: "{{ user }}"
+  loop:
+    - "{{ homedir }}/.local/share/fonts"
+    - "{{ homedir }}/.zsh"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: "0755"
+    state: "directory"
+
+- name: "Install antidote for managing zsh plugins"
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.git:
+    repo: "https://github.com/mattmc3/antidote.git"
+    dest: "{{ homedir }}/.zsh/antidote"
+    update: true # noqa: latest
+
+- name: "Install powerlevel10k-recommended fonts"
+  become: true
+  become_user: "{{ user }}"
+  loop:
+    - "MesloLGS NF Regular.ttf"
+    - "MesloLGS NF Bold.ttf"
+    - "MesloLGS NF Italic.ttf"
+    - "MesloLGS NF Bold Italic.ttf"
+  ansible.builtin.get_url:
+    url: "https://github.com/romkatv/powerlevel10k-media/raw/master/{{ item | regex_replace(' ', '%20') }}"
+    dest: "{{ homedir }}/.local/share/fonts/{{ item }}"
+    mode: "0644"
+
+- name: "Install powerlevel10k zsh theme"
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.git:
+    repo: "https://github.com/romkatv/powerlevel10k.git"
+    dest: "{{ homedir }}/.zsh/powerlevel10k"
+    update: true # noqa: latest
+
+- name: "Install nanorc"
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.git:
+    repo: "https://github.com/scopatz/nanorc.git"
+    dest: "{{ homedir }}/.nano"
+    update: true # noqa: latest
+
+- name: "Configure nanorc"
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.copy:
+    dest: "{{ homedir }}/.nanorc"
+    content: |
+      include {{ homedir }}/.nano/*.nanorc
+    mode: "0644"

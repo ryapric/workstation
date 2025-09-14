@@ -1,23 +1,49 @@
 #!/usr/bin/env zsh
 
-# Shared shell rc file
+### Shared shell rc file
 source "${HOME}/.sharedrc"
 
-### ZSH stuff
-export ZSH="${HOME}/.oh-my-zsh"
-ZSH_THEME="gnzh"
-plugins=(
-  docker
-  docker-compose
-  git
-  python
-  ubuntu
-)
+export zsh_cfg_dir="${HOME}/.zsh"
 
-source "${ZSH}/oh-my-zsh.sh"
+### Non-theme ZSH stuff
+HISTFILE=~/.zsh_history
+HISTSIZE=5000
+SAVEHIST=5000
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt incappendhistory
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+source "${zsh_cfg_dir}/antidote/antidote.zsh"
+antidote load "${zsh_cfg_dir}/zsh_plugins.conf"
+
+### Keybindings, which need to be modified after loading plugins
+
+#### zsh-history-substring-search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+if is-linux ; then
+  bindkey "${terminfo[kcuu1]}" history-substring-search-up
+  bindkey "${terminfo[kcud1]}" history-substring-search-down
+fi
+
+# For some reason, bare zsh on Linux doesn't have word-jumping bound, so set those keybinds here
+if is-linux ; then
+  bindkey "${terminfo[kLFT5]}" backward-word
+  bindkey "${terminfo[kRIT5]}" forward-word
+fi
+
+### Powerlevel10k themeing
+# The theme sources
+source "${zsh_cfg_dir}/powerlevel10k/powerlevel10k.zsh-theme"
+# Your own p10k config file to use those theme sources
+source "${zsh_cfg_dir}/p10k.zsh"
 
 ### mise-en-place
 eval "$(mise activate zsh)"
 
-# shellcheck disable=SC1091
 source "${HOME}/.sharedrc-final"

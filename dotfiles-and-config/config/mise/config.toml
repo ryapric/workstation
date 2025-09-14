@@ -1,6 +1,32 @@
 [settings]
-idiomatic_version_file_enable_tools = ["python"]
+idiomatic_version_file_enable_tools = []
+experimental = true
+
+[settings.pipx]
+uvx = true
+
+[env]
+# Allows tools installed via the cargo backend to skip any Git auth configs that it tries to set on
+# its own, and just what the host has configured
+CARGO_NET_GIT_FETCH_WITH_CLI = true
 
 [tools]
-go = "1.25.0"
-uv = "0.8.14"
+bats = "prefix:1"
+buf = "prefix:1"
+go = "prefix:1"
+jq = "prefix:1"
+kubectl = "prefix:1"
+packer = "prefix:1"
+protobuf = "prefix:32"
+python = "prefix:3"
+ripgrep = "prefix:14"
+rust = "prefix:1"
+shellcheck = "prefix:0"
+terraform = "prefix:1.13"
+uv = "prefix:0.8"
+vault = "prefix:1"
+
+# protoc plugins
+"go:google.golang.org/protobuf/cmd/protoc-gen-go" = { version = "prefix:1" }
+"go:google.golang.org/grpc/cmd/protoc-gen-go-grpc" = { version = "prefix:1" }
+"go:github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway" = { version = "prefix:2" }

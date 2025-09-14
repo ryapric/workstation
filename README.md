@@ -21,5 +21,5 @@ dotfile etc. placement on the host.
   `main.yaml` file should only set vars, and run tasks (found broken out in `system/ansible/tasks`)
 
 * New dotfiles or other configuration files go in the `dotfiles-and-config/` directory. Anything you
-  add needs to be reflected in the `map.txt` file in that directory, in order to specify what to do
+  add needs to be reflected in the `map.conf` file in that directory, in order to specify what to do
   with the file. The placement is ultimately handled by the `setup.sh` script in the same directory.
