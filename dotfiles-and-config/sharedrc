@@ -83,20 +83,30 @@ csvql() {
 if ! command -v mise > /dev/null ; then
   printf 'NOTE: mise not found on PATH, will install\n' >&2
 
-  mise_version='v2025.8.21'
-
   # Defaults based on the machines I usually run
   os='linux'
   arch='x64'
 
+  ggrep='grep'
   if [[ "$(uname -s)" == "Darwin" ]] ; then
     os='macos'
+    ggrep='ggrep'
   fi
   if [[ "$(uname -m)" == "arm64" ]] ; then
     arch='arm64'
   fi
 
-  curl -fsSL -o "${HOME}/.local/bin/mise" "https://github.com/jdx/mise/releases/download/${mise_version}/mise-${mise_version}-${os}-${arch}"
+  os_arch="${os}-${arch}"
+
+  download_uri="$(
+    curl -fsSL https://api.github.com/repos/jdx/mise/releases/latest \
+    | ${ggrep} -E '"browser_download_url"' \
+    | ${ggrep} -E "${os_arch}\"$" \
+    | ${ggrep} -E -o 'https://.*[^"]'
+  )"
+
+  mkdir -p "${HOME}/.local/bin"
+  curl -fsSL -o "${HOME}/.local/bin/mise" "${download_uri}"
   chmod +x "${HOME}/.local/bin/mise"
 fi
 

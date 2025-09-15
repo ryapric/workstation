@@ -10,13 +10,6 @@
     debian_release_number: "13"
     debian_release_alias: "trixie"
     apt_repos:
-      - name: "mise"
-        uri: "https://mise.jdx.dev/deb"
-        key_uri: "https://mise.jdx.dev/gpg-key.pub"
-        suite: "stable"
-        component: "main"
-        packages:
-          - "mise"
       - name: "docker"
         uri: "https://download.docker.com/linux/debian"
         key_uri: "https://download.docker.com/linux/debian/gpg"
