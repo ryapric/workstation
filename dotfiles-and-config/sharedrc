@@ -9,7 +9,6 @@ for p in \
   "${HOME}/.local/bin" \
   "${HOME}/.local/go/bin" \
   "${HOME}/go/bin" \
-  "${HOME}/.cargo/bin" \
   "/usr/games" \
   "/usr/local/games" \
 ; do
@@ -38,6 +37,7 @@ alias gp='git push'
 ### Vars
 export AWS_DEFAULT_REGION='us-east-2'
 export DOCKER_BUILDKIT=1
+export GITHUB_TOKEN="$(gh auth token)"
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 
 # export VAGRANT_EXPERIMENTAL="disks"
