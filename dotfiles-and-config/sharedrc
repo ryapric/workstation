@@ -66,7 +66,7 @@ is-macos() {
 git-branch-cleanup() {
   git fetch --prune 2>&1 \
   | awk '{ gsub(/origin\//, "", $5) ; print $5 }' \
-  | xargs -I{} git branch -D || true
+  | xargs -I{} git branch -D {} || true
 }
 
 # Quick-and-dirty but handy SQLite func for operating directly on CSVs
