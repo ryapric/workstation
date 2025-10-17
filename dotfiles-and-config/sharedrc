@@ -22,6 +22,7 @@ alias cfn='aws cloudformation '
 alias dsp='docker system prune'
 alias dspv='docker system prune --volumes'
 alias k='kubectl '
+alias s="source ${HOME}/.zshrc"
 alias tclsh='rlwrap tclsh '
 alias tf='terraform '
 # System update
