@@ -39,6 +39,7 @@ alias gp='git push'
 ### Vars
 export AWS_DEFAULT_REGION='us-east-2'
 export DOCKER_BUILDKIT=1
+export EDITOR='nano'
 export GITHUB_TOKEN="$(gh auth token)"
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 
