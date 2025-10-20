@@ -69,7 +69,7 @@ is-macos() {
 kctx() {
   local ctx="${1:-}"
   if [[ -z "${ctx}" ]] ; then
-    printf 'Current context is:\n%s\n' "$(kubectl config current-context)"
+    printf 'Current context is:\n%s\n' "$(kubectl config current-context || echo '*none*')"
     printf '\n'
     printf 'Available contexts are:\n'
     kubectl config get-contexts --output name | sort -h
