@@ -17,6 +17,7 @@ aws = "2.31.3"
 bats = "1.12.0"
 btop = { version = "1.4.5", os = ["linux"] }
 buf = "1.57.2"
+fd = "10.3.0"
 github-cli = "2.79.0"
 go = "1.25.2"
 go-jsonnet = "0.21.0"
