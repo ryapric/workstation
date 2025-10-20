@@ -39,6 +39,7 @@ alias gp='git push'
 ### Vars
 export AWS_DEFAULT_REGION='us-east-2'
 export DOCKER_BUILDKIT=1
+export EDITOR='nano'
 export GITHUB_TOKEN="$(gh auth token)"
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 
@@ -68,7 +69,8 @@ is-macos() {
 kctx() {
   local ctx="${1:-}"
   if [[ -z "${ctx}" ]] ; then
-    printf 'Current context is: "%s"\n' "$(kubectl config current-context)"
+    printf 'Current context is:\n%s\n' "$(kubectl config current-context)"
+    printf '\n'
     printf 'Available contexts are:\n'
     kubectl config get-contexts --output name | sort -h
   else
