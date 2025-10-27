@@ -17,25 +17,6 @@ for p in \
   fi
 done
 
-### Aliases
-alias cfn='aws cloudformation '
-alias dsp='docker system prune'
-alias dspv='docker system prune --volumes'
-alias k='kubectl '
-alias k9s='k9s --headless --logoless '
-alias s="source ${HOME}/.zshrc"
-alias tclsh='rlwrap tclsh '
-alias tf='terraform '
-# System update
-# Name chosen because this matches one of the oh-my-zsh aliases for all this
-alias agud='sudo apt update && sudo apt dist-upgrade && sudo apt autoremove -y && sudo apt autoclean -y'
-# Git aliases
-alias gst='git status'
-alias gco='git checkout '
-alias gl='git pull'
-alias gc='git commit '
-alias gp='git push'
-
 ### Vars
 export AWS_DEFAULT_REGION='us-east-2'
 export DOCKER_BUILDKIT=1
@@ -66,18 +47,6 @@ is-macos() {
   return 1
 }
 
-kctx() {
-  local ctx="${1:-}"
-  if [[ -z "${ctx}" ]] ; then
-    printf 'Current context is:\n%s\n' "$(kubectl config current-context || echo '*none*')"
-    printf '\n'
-    printf 'Available contexts are:\n'
-    kubectl config get-contexts --output name | sort -h
-  else
-    kubectl config use-context "${ctx}"
-  fi
-}
-
 git-branch-cleanup() {
   git fetch --prune 2>&1 \
   | awk '{ gsub(/origin\//, "", $5) ; print $5 }' \
@@ -93,6 +62,85 @@ csvql() {
     -cmd '.mode column' \
     "${2}"
 }
+
+# Functions to prompt for actions against prod-sounding resources. Each block should:
+#
+# 1. Be prefixed with a check/assignment for the actual command on $PATH, so we can still access it
+# 2. Define the functions, each name of which is prefixed with "safe_"
+# 3. Assign an alias to the original command name
+
+if [[ -z "${_aws}" ]] ; then
+  _aws="$(command -v aws)"
+fi
+safe_aws() {
+  local ctx="${AWS_PROFILE}"
+  if [[ "${ctx}" =~ prod ]] && [[ -z "${SAFE_YES:-}" ]] ; then
+    printf 'Current AWS_PROFILE is: %s\n' "${ctx}"
+    printf 'Are you sure you want to continue? (y/n) '
+    read -r yn
+    if [[ "${yn}" =~ ^[Yy] ]] ; then
+      "${_aws}" "$@"
+    else
+      printf 'Aborting.\n'
+      return 1
+    fi
+  else
+    "${_aws}" "$@"
+  fi
+}
+alias aws='safe_aws '
+
+if [[ -z "${_kubectl}" ]] ; then
+  _kubectl="$(command -v kubectl)"
+fi
+safe_kubectl() {
+  local ctx="$("${_kubectl}" config current-context)"
+  if [[ "${ctx}" =~ prod ]] && [[ -z "${SAFE_YES:-}" ]] ; then
+    printf 'Current context is: %s\n' "${ctx}"
+    printf 'Are you sure you want to continue? (y/n) '
+    read -r yn
+    if [[ "${yn}" =~ ^[Yy] ]] ; then
+      "${_kubectl}" "$@"
+    else
+      printf 'Aborting.\n'
+      return 1
+    fi
+  else
+    "${_kubectl}" "$@"
+  fi
+}
+alias kubectl='safe_kubectl '
+
+kctx() {
+  local ctx="${1:-}"
+  if [[ -z "${ctx}" ]] ; then
+    printf 'Current context is:\n%s\n' "$("${_kubectl}" config current-context || echo '*none*')"
+    printf '\n'
+    printf 'Available contexts are:\n'
+    kubectl config get-contexts --output name | sort -h
+  else
+    kubectl config use-context "${ctx}"
+  fi
+}
+
+### Aliases
+alias cfn='aws cloudformation '
+alias dsp='docker system prune'
+alias dspv='docker system prune --volumes'
+alias k='kubectl '
+alias k9s='k9s --headless --logoless '
+alias s='source ${HOME}/.zshrc'
+alias tclsh='rlwrap tclsh '
+alias tf='terraform '
+# System update
+# Name chosen because this matches one of the oh-my-zsh aliases for all this
+alias agud='sudo apt update && sudo apt dist-upgrade && sudo apt autoremove -y && sudo apt autoclean -y'
+# Git aliases
+alias gst='git status'
+alias gco='git checkout '
+alias gl='git pull'
+alias gc='git commit '
+alias gp='git push'
 
 ### Install mise if it isn't already
 if ! command -v mise > /dev/null ; then
