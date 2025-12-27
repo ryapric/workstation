@@ -22,6 +22,7 @@ export AWS_DEFAULT_REGION='us-east-2'
 export DOCKER_BUILDKIT=1
 export EDITOR='nano'
 export GITHUB_TOKEN="$(gh auth token)"
+export MISE_GITHUB_TOKEN="${GITHUB_TOKEN}"
 export OSC_INFRA_ROOT="${HOME}/repos/opensourcecorp/osc-infra"
 
 # export VAGRANT_EXPERIMENTAL="disks"
@@ -121,6 +122,13 @@ kctx() {
   else
     kubectl config use-context "${ctx}"
   fi
+}
+
+steam() {
+  flatpak run \
+    --user \
+    --system-talk-name=org.freedesktop.NetworkManager \
+    com.valvesoftware.Steam
 }
 
 ### Aliases
