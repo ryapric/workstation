@@ -124,6 +124,13 @@ kctx() {
   fi
 }
 
+steam() {
+  flatpak run \
+    --user \
+    --system-talk-name=org.freedesktop.NetworkManager \
+    com.valvesoftware.Steam
+}
+
 ### Aliases
 alias cfn='aws cloudformation '
 alias dsp='docker system prune'
